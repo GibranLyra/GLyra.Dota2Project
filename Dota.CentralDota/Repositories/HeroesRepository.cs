@@ -11,19 +11,35 @@ namespace Dota.CentralDota.Repositories
 {
     class HeroesRepository
     {
+        AgilityPackHelper agilityPackHelper;
 
         public HeroesRepository()
         {
+            agilityPackHelper = new AgilityPackHelper();
             // load snippet
-            HtmlDocument htmlSnippet = new HtmlDocument();
-            htmlSnippet = LoadHtmlSnippetFromFile();
+            HtmlDocument doc = new HtmlDocument();
+            doc = LoadHtmlSnippetFromFile();
 
-            // extract hrefs
-            List<string> hrefTags = new List<string>();
-            hrefTags = ExtractAllAHrefTags(htmlSnippet);
+            
+            var skillImages = new List<string>();
+            var skillNames = new List<string>();
+            var skillDescriptions = new List<string>();
+            var primaryStatsImages = new List<string>();
+            var primaryStatsValues = new List<string>();
+            string biography;
+            var manaCosts = new List<string>();
+            var coolDowns = new List<string>();
 
+            skillImages = GetSkillPortraits(doc);
+            skillNames = GetSkillNames(doc);
+            skillDescriptions = GetSkillDescriptions(doc);
+            primaryStatsImages = GetPrimaryStatsImages(doc);
+            primaryStatsValues = GetPrimaryStatsValues(doc);
+            biography = GetBiography(doc);
+            //TODO Stats(Atributos)
+            manaCosts = GetManaCost(doc);
+            coolDowns = GetCoolDown(doc);
         }
-
 
         /// <summary>
         /// Load the html snippet from the txt file
@@ -36,37 +52,140 @@ namespace Dota.CentralDota.Repositories
             return doc;
         }
 
-        /// <summary>
-        /// Extract all anchor tags using HtmlAgilityPack
-        /// </summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
-        private List<string> ExtractAllAHrefTags(HtmlDocument doc)
+        List<string> GetSkillPortraits(HtmlDocument doc)
         {
-            List<string> habilityImageUrl = new List<string>();
+            int expectedSize = 1;
+            List<string> habilityImgUrlsList = new List<string>();
 
-            var allElementsWithClassFloat = doc.DocumentNode.SelectNodes("//*[contains(@class,'abilityIconHolder2')]");
+            var abilityIconHolder2 = doc.DocumentNode.SelectNodes("//*[(@class = 'abilityIconHolder2')]");
 
-            foreach (var abilityIconHolder in allElementsWithClassFloat)
+            habilityImgUrlsList = agilityPackHelper.GetImageUrls(abilityIconHolder2, "abilityIconHolder2", expectedSize);            
+
+            return habilityImgUrlsList;
+        }
+
+        List<string> GetSkillNames(HtmlDocument doc)
+        {
+            int expectedSize = 1;
+            var skillNamesList = new List<string>();
+
+            var overviewAbilityRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'overviewAbilityRowDescription']");
+
+            foreach (var skillName in overviewAbilityRowDescription)
             {
-                var urls = abilityIconHolder.Descendants("img")
-                                .Select(e => e.GetAttributeValue("src", null))
-                                .Where(s => !String.IsNullOrEmpty(s));
+                //Get the skillNames
+                var skillNames = skillName.Descendants("h2")
+                                    .Select(n => n.InnerHtml);
 
-                if (urls.Count() > 1)
-                {
-                    Console.WriteLine("Warning, node " + abilityIconHolder.Id + " has more than one hability Image");
+                //Insert the skillName in the list
+                if (skillNames.Count() > expectedSize)
+                    LogHandler.createWarningLog("overviewAbilityRowDescription-SkillName", expectedSize, skillNames.Count());
 
-                }
-                else
-                {
-                    habilityImageUrl.Add(urls.First());
-                }
-                
+                skillNamesList.Add(skillNames.First());
             }
 
+            return skillNamesList;
+        }
 
-            return habilityImageUrl;
+        List<string> GetSkillDescriptions(HtmlDocument doc)
+        {
+            int expectedSize = 1;
+            var skillDescriptionsList = new List<string>();
+
+            var overviewAbilityRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'overviewAbilityRowDescription']");
+
+            foreach (var skillDescription in overviewAbilityRowDescription)
+            {
+                //Get the skillDescription
+                var skillDescriptions = skillDescription.Descendants("p")
+                                    .Select(n => n.InnerHtml);
+
+                
+                if (skillDescriptions.Count() > expectedSize)
+                    LogHandler.createWarningLog("overviewAbilityRowDescription-SkillDescription", expectedSize, skillDescriptions.Count());                
+                
+                skillDescriptionsList.Add(skillDescriptions.First());                
+            }
+
+            return skillDescriptionsList;
+        }
+
+        List<string> GetPrimaryStatsImages(HtmlDocument doc)
+        {
+            int expectedSize = 7;
+            var primaryStatsImgUrlsList = new List<string>();
+
+            var overviewPrimaryStats = doc.DocumentNode.SelectNodes("//*[@id = 'overviewPrimaryStats']");
+            primaryStatsImgUrlsList = agilityPackHelper.GetImageUrls(overviewPrimaryStats, "overviewPrimaryStats", expectedSize);
+
+            return primaryStatsImgUrlsList;
+        }
+
+        List<string> GetPrimaryStatsValues(HtmlDocument doc)
+        {
+            int expectedSize = 6;
+            var primaryStatsList = new List<string>();
+
+            var overviewStatVal = doc.DocumentNode.SelectNodes("//*[@class = 'overview_StatVal']");
+
+            foreach (var primaryStat in overviewStatVal)
+            {
+                //Get PrimaryStat
+                primaryStatsList.Add(primaryStat.InnerText);
+            }
+
+            if (primaryStatsList.Count() > expectedSize)
+                LogHandler.createWarningLog("overviewStatVal", expectedSize, overviewStatVal.Count());                
+
+            return primaryStatsList;
+        }
+
+        string GetBiography(HtmlDocument doc)
+        {
+            string bio;
+
+            var bioInner = doc.DocumentNode.SelectNodes("//*[@id = 'bioInner']");
+            bio = bioInner.First().InnerText;
+
+            return bio;
+        }
+
+        List<string> GetManaCost(HtmlDocument doc)
+        {
+            var manaCostList = new List<string>();
+
+            var mana = doc.DocumentNode.SelectNodes("//*[@class = 'mana']");
+
+            foreach (var manaCost in mana)
+            {
+                //Search for the span in the node
+                var spanManaCost = manaCost.Descendants("span");
+                //Remove the span that contains the text "Mana Cost: "
+                manaCost.RemoveChild(spanManaCost.First());
+
+                manaCostList.Add(manaCost.InnerText);                
+            }
+            
+            return manaCostList;
+        }
+
+        List<string> GetCoolDown(HtmlDocument doc)
+        {
+            var coolDownList = new List<string>();
+
+            var cooldown = doc.DocumentNode.SelectNodes("//*[@class = 'cooldown']");
+
+            foreach (var cooldownTime in cooldown)
+            {
+                //Search for the span in the node
+                var spanCoolDownTime = cooldownTime.Descendants("span");
+                //Remove the span that contains the text "Cooldown: "
+                cooldownTime.RemoveChild(spanCoolDownTime.First());
+
+                coolDownList.Add(cooldownTime.InnerText);
+            }
+
+            return coolDownList;
         }
 
         protected Stream GetStream(string url)

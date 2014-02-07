@@ -59,7 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgilityPackHelper.cs" />
     <Compile Include="BaseRepositoryApi.cs" />
+    <Compile Include="LogHandler.cs" />
     <Compile Include="Model\Hero.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

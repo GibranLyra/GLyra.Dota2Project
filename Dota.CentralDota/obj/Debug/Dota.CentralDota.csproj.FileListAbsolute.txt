@@ -16,3 +16,6 @@ C:\Users\Gibras\Documents\Visual Studio 2013\Training\Dota.CentralDota\Dota.Cent
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\Dota.CentralDota\Dota.CentralDota\bin\Debug\HtmlAgilityPack.dll
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\Dota.CentralDota\Dota.CentralDota\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\Dota.CentralDota\Dota.CentralDota\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\Dota.CentralDota\bin\Debug\Dota.CentralDota.exe.config
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\Dota.CentralDota\obj\Debug\Dota.CentralDota.exe
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\Dota.CentralDota\obj\Debug\Dota.CentralDota.pdb
