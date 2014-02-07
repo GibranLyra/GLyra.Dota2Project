@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>SteamWebAPI</id>
+    <version>1.0.13</version>
+    <title>Portable Steam Web API Wrapper for C#</title>
+    <authors>Albin Ma</authors>
+    <owners>Albin Ma</owners>
+    <licenseUrl>https://portablesteamwebapi.codeplex.com/license</licenseUrl>
+    <projectUrl>https://portablesteamwebapi.codeplex.com/</projectUrl>
+    <iconUrl>http://i.imgur.com/DFRypWu.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>The goal of this project is to allow C# developers who intend to use the Steam Web API to pull data from the Valve API server easily without worrying about syntax, interface names, method names and parameters. This portable class library is designed to be intuitive, robust and will hopefully help developers focus on other parts of their exciting application!</description>
+    <summary>Portable Steam Web API Wrapper for C#. Intuitive way to request data from Valve's Steam Web API service using a Fluent design pattern.</summary>
+    <releaseNotes>Updated GetOwnedGames to show obsolete methods.</releaseNotes>
+    <copyright />
+    <language>en-US</language>
+    <tags>Steam Fluent Web API WebAPI SteamFluentAPI Team Fortress Dota Valve</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="5.0.8" />
+      <dependency id="Microsoft.Net.Http" version="2.2.18" />
+    </dependencies>
+  </metadata>
+</package>
