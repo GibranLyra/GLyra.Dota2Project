@@ -25,7 +25,6 @@ namespace Dota.CentralDota.Repositories
             var coolDowns = new List<string>();
             var skillBehaviours = new List<string>();
             var skillDamageType = new List<string>();
-            var skillVideos = new List<string>();
             //TODO Armazenar quantidade de skills que o heroi tem
             agilityPackHelper = new AgilityPackHelper();
             // load snippet
@@ -43,8 +42,6 @@ namespace Dota.CentralDota.Repositories
             coolDowns = GetCoolDown(doc);
             skillBehaviours = GetSkillBehaviour(doc);
             skillDamageType = GetSkillDamageType(doc);
-            skillVideos = GetSkillVideo(doc);
-            GetSkillRemainingValues(doc);
         }
 
         private HtmlDocument LoadHtmlSnippetFromFile()
@@ -134,10 +131,10 @@ namespace Dota.CentralDota.Repositories
         {
             var damageType = new List<string>();
 
-            var abilityFooterBoxLeft = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
+            var skillList = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
 
             //Pega o valor do ultimo span(que é o que contém a informação do tipo de dano da skill)
-            foreach (var skillType in abilityFooterBoxLeft)
+            foreach (var skillType in skillList)
             {
                 var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
                 //Algumas skills não tem dano
@@ -150,21 +147,7 @@ namespace Dota.CentralDota.Repositories
             return damageType;
         }
 
-        List<string> GetSkillRemainingValues(HtmlDocument doc)
-        {
-            var remainingValues = new List<string>();
-
-            var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
-
-            foreach (var remainingValue in abilityFooterBoxRight)
-            {
-                //TODO Terminar está função
-
-                var spanList = remainingValue.SelectNodes(".//*[contains(@span, '')]");
-            }
-
-            return remainingValues;
-        }
+        //TODO Get the description data of the skills
 
         List<string> GetSkillVideo(HtmlDocument doc)
         {
@@ -176,13 +159,14 @@ namespace Dota.CentralDota.Repositories
             foreach (var video in abilityVideoContainer)
             {
                 //Get the skillDescription
-                var skillVideos = video.Descendants("iframe")
-                                    .Select(e => e.GetAttributeValue("src", null));
+                var skillDescriptions = video.Descendants("p")
+                                    .Select(n => n.InnerHtml);
 
-                if (skillVideos.Count() > expectedSize)
-                    LogHandler.createWarningLog("overviewAbilityRowDescription-SkillDescription", expectedSize, skillVideos.Count());
 
-                skillVideoList.Add(skillVideos.First());
+                if (skillDescriptions.Count() > expectedSize)
+                    LogHandler.createWarningLog("overviewAbilityRowDescription-SkillDescription", expectedSize, skillDescriptions.Count());
+
+                skillVideoList.Add(skillDescriptions.First());
             }
 
             return skillVideoList;

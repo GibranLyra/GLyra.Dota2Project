@@ -16,7 +16,8 @@ namespace Dota.CentralDota.Model
         public string SmallHorizontalPortrait { get; set; }
         public string LargeHorizontalPortrait { get; set; }
         public string FullQualityHorizontalPortrait { get; set; }
-        public string FullQualityVerticalPortrait { get; set; }        
+        public string FullQualityVerticalPortrait { get; set; }
+
 
 
     }

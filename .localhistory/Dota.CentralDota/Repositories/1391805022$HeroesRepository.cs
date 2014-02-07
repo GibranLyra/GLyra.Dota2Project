@@ -158,7 +158,7 @@ namespace Dota.CentralDota.Repositories
 
             foreach (var remainingValue in abilityFooterBoxRight)
             {
-                //TODO Terminar está função
+                
 
                 var spanList = remainingValue.SelectNodes(".//*[contains(@span, '')]");
             }

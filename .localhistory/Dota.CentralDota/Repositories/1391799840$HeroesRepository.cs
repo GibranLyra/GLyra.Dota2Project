@@ -23,10 +23,8 @@ namespace Dota.CentralDota.Repositories
             string biography;
             var manaCosts = new List<string>();
             var coolDowns = new List<string>();
-            var skillBehaviours = new List<string>();
-            var skillDamageType = new List<string>();
-            var skillVideos = new List<string>();
-            //TODO Armazenar quantidade de skills que o heroi tem
+            var isSkillPassiveList = new List<bool>();
+
             agilityPackHelper = new AgilityPackHelper();
             // load snippet
             HtmlDocument doc = new HtmlDocument();
@@ -41,10 +39,7 @@ namespace Dota.CentralDota.Repositories
             //TODO Stats(Atributos)
             manaCosts = GetManaCost(doc);
             coolDowns = GetCoolDown(doc);
-            skillBehaviours = GetSkillBehaviour(doc);
-            skillDamageType = GetSkillDamageType(doc);
-            skillVideos = GetSkillVideo(doc);
-            GetSkillRemainingValues(doc);
+            checkPassiveSkills(doc);
         }
 
         private HtmlDocument LoadHtmlSnippetFromFile()
@@ -90,6 +85,23 @@ namespace Dota.CentralDota.Repositories
             return skillNamesList;
         }
 
+        List<string> checkPassiveSkills(HtmlDocument doc)
+        {
+            var passiveSkillList = new List<string>();
+
+            var skillList = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
+
+            foreach (var skillType in skillList)
+            {
+                var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
+                passiveSkillList.Add(spanList.First().InnerText);
+            }
+
+
+            return passiveSkillList;
+        }
+
+
         List<string> GetSkillDescriptions(HtmlDocument doc)
         {
             int expectedSize = 1;
@@ -112,82 +124,6 @@ namespace Dota.CentralDota.Repositories
 
             return skillDescriptionsList;
         }
-
-        List<string> GetSkillBehaviour(HtmlDocument doc)
-        {
-            var passiveSkillList = new List<string>();
-
-            var skillList = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
-
-
-            //Pega o valor do primeiro span(que é o que contém a informação do comportamento da skill
-            foreach (var skillType in skillList)
-            {
-                var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
-                passiveSkillList.Add(spanList.First().InnerText);
-            }
-
-            return passiveSkillList;
-        }
-
-        List<string> GetSkillDamageType(HtmlDocument doc)
-        {
-            var damageType = new List<string>();
-
-            var abilityFooterBoxLeft = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
-
-            //Pega o valor do ultimo span(que é o que contém a informação do tipo de dano da skill)
-            foreach (var skillType in abilityFooterBoxLeft)
-            {
-                var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
-                //Algumas skills não tem dano
-                if (spanList.Count > 1)
-                    damageType.Add(spanList.Last().InnerText);
-                else
-                    damageType.Add(String.Empty);
-            }
-
-            return damageType;
-        }
-
-        List<string> GetSkillRemainingValues(HtmlDocument doc)
-        {
-            var remainingValues = new List<string>();
-
-            var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
-
-            foreach (var remainingValue in abilityFooterBoxRight)
-            {
-                //TODO Terminar está função
-
-                var spanList = remainingValue.SelectNodes(".//*[contains(@span, '')]");
-            }
-
-            return remainingValues;
-        }
-
-        List<string> GetSkillVideo(HtmlDocument doc)
-        {
-            int expectedSize = 1;
-            var skillVideoList = new List<string>();
-
-            var abilityVideoContainer = doc.DocumentNode.SelectNodes("//*[@class = 'abilityVideoContainer']");
-
-            foreach (var video in abilityVideoContainer)
-            {
-                //Get the skillDescription
-                var skillVideos = video.Descendants("iframe")
-                                    .Select(e => e.GetAttributeValue("src", null));
-
-                if (skillVideos.Count() > expectedSize)
-                    LogHandler.createWarningLog("overviewAbilityRowDescription-SkillDescription", expectedSize, skillVideos.Count());
-
-                skillVideoList.Add(skillVideos.First());
-            }
-
-            return skillVideoList;
-        }
-
 
         List<string> GetPrimaryStatsImages(HtmlDocument doc)
         {

@@ -20,8 +20,6 @@ C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\Dota.Ce
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\Dota.CentralDota\obj\Debug\Dota.CentralDota.exe
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\Dota.CentralDota\obj\Debug\Dota.CentralDota.pdb
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\Dota.CentralDota.exe.config
-D:\PersonalProjects\Dota.CentralDota\obj\Debug\Dota.CentralDota.csproj.App.config
-D:\PersonalProjects\Dota.CentralDota\obj\Debug\Dota.CentralDota.csprojResolveAssemblyReference.cache
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\Dota.CentralDota.exe
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\Dota.CentralDota.pdb
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\HtmlAgilityPack.dll
@@ -36,5 +34,7 @@ D:\PersonalProjects\Dota.CentralDota\bin\Debug\PortableSteam.xml
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\System.Data.xml
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\System.Net.Http.Extensions.xml
 D:\PersonalProjects\Dota.CentralDota\bin\Debug\System.Net.Http.Primitives.xml
+D:\PersonalProjects\Dota.CentralDota\obj\Debug\Dota.CentralDota.csproj.App.config
 D:\PersonalProjects\Dota.CentralDota\obj\Debug\Dota.CentralDota.exe
 D:\PersonalProjects\Dota.CentralDota\obj\Debug\Dota.CentralDota.pdb
+D:\PersonalProjects\Dota.CentralDota\obj\Debug\Dota.CentralDota.csprojResolveAssemblyReference.cache

@@ -44,7 +44,6 @@ namespace Dota.CentralDota.Repositories
             skillBehaviours = GetSkillBehaviour(doc);
             skillDamageType = GetSkillDamageType(doc);
             skillVideos = GetSkillVideo(doc);
-            GetSkillRemainingValues(doc);
         }
 
         private HtmlDocument LoadHtmlSnippetFromFile()
@@ -134,10 +133,10 @@ namespace Dota.CentralDota.Repositories
         {
             var damageType = new List<string>();
 
-            var abilityFooterBoxLeft = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
+            var skillList = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
 
             //Pega o valor do ultimo span(que é o que contém a informação do tipo de dano da skill)
-            foreach (var skillType in abilityFooterBoxLeft)
+            foreach (var skillType in skillList)
             {
                 var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
                 //Algumas skills não tem dano
@@ -150,21 +149,7 @@ namespace Dota.CentralDota.Repositories
             return damageType;
         }
 
-        List<string> GetSkillRemainingValues(HtmlDocument doc)
-        {
-            var remainingValues = new List<string>();
-
-            var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
-
-            foreach (var remainingValue in abilityFooterBoxRight)
-            {
-                //TODO Terminar está função
-
-                var spanList = remainingValue.SelectNodes(".//*[contains(@span, '')]");
-            }
-
-            return remainingValues;
-        }
+        //TODO Get the description data of the skills
 
         List<string> GetSkillVideo(HtmlDocument doc)
         {

@@ -44,7 +44,7 @@ namespace Dota.CentralDota.Repositories
             skillBehaviours = GetSkillBehaviour(doc);
             skillDamageType = GetSkillDamageType(doc);
             skillVideos = GetSkillVideo(doc);
-            GetSkillRemainingValues(doc);
+            GetSkillRemainingValues();
         }
 
         private HtmlDocument LoadHtmlSnippetFromFile()
@@ -158,9 +158,7 @@ namespace Dota.CentralDota.Repositories
 
             foreach (var remainingValue in abilityFooterBoxRight)
             {
-                //TODO Terminar está função
-
-                var spanList = remainingValue.SelectNodes(".//*[contains(@span, '')]");
+                var spanList = remainingValue.SelectNodes(".//*[@span]");
             }
 
             return remainingValues;
