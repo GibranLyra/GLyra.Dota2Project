@@ -16,3 +16,21 @@ D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\bin\Debug\System.Net.Http.Extensions
 D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\bin\Debug\System.Net.Http.Primitives.xml
 D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\obj\Debug\GLyra.Dota2.exe
 D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\obj\Debug\GLyra.Dota2.pdb
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\GLyra.Dota2.exe.config
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.csproj.App.config
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.csprojResolveAssemblyReference.cache
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\GLyra.Dota2.exe
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\GLyra.Dota2.pdb
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\PortableSteam.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\System.Net.Http.Extensions.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\PortableSteam.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\System.Net.Http.Extensions.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\System.Net.Http.Primitives.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.exe
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.pdb
