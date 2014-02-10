@@ -26,6 +26,7 @@ namespace Dota.CentralDota.Repositories
             var skillBehaviours = new List<string>();
             var skillDamageType = new List<string>();
             var skillVideos = new List<string>();
+            var skillRemainingValues = new List<List<string>>();
             //TODO Armazenar quantidade de skills que o heroi tem
             agilityPackHelper = new AgilityPackHelper();
             // load snippet
@@ -44,7 +45,7 @@ namespace Dota.CentralDota.Repositories
             skillBehaviours = GetSkillBehaviour(doc);
             skillDamageType = GetSkillDamageType(doc);
             skillVideos = GetSkillVideo(doc);
-            GetSkillRemainingValues(doc);
+            skillRemainingValues = GetSkillRemainingValues(doc);
         }
 
         private HtmlDocument LoadHtmlSnippetFromFile()
@@ -150,9 +151,9 @@ namespace Dota.CentralDota.Repositories
             return damageType;
         }
 
-        List<string> GetSkillRemainingValues(HtmlDocument doc)
+        List<List<string>> GetSkillRemainingValues(HtmlDocument doc)
         {
-            var remainingValues = new List<string>();
+            var remainingValues = new List<List<string>>();
 
             var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
 
@@ -160,7 +161,34 @@ namespace Dota.CentralDota.Repositories
             {
                 //TODO Terminar está função
 
-                var spanList = remainingValue.SelectNodes(".//*[contains(@span, '')]");
+                var divInnerHtml = remainingValue.SelectNodes(".//*[contains(@span, '')]");
+
+
+
+                var brList = divInnerHtml.Where(x => x.Name == "br").ToList();                
+                var spanList = divInnerHtml.Where(x => x.Name == "span").ToList();
+
+                var brTextList = new List<string>();//Onde ficam as descrições do que a skill faz
+                var spanTextList = new List<string>(); //Onde ficam os valores do que a skill faz
+
+                for (int i = 0; i < brList.Count; i++)
+                {
+                    //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
+                    if(i == 0)
+                        brTextList.Add(brList[i].PreviousSibling.PreviousSibling.InnerText);
+
+                    brTextList.Add(brList[i].NextSibling.InnerText);
+                }
+
+                foreach (var span in spanList)
+                {
+                    spanTextList.Add(span.InnerText);
+                }
+
+
+                remainingValues.Add(brTextList);
+                remainingValues.Add(spanTextList);
+                //spanList.
             }
 
             return remainingValues;
