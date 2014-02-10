@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Dota2Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Dota2ModelStoreContainer">
+    <EntitySet Name="AbilityType" EntityType="Dota2Model.Store.AbilityType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Attributes" EntityType="Dota2Model.Store.Attributes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DamageType" EntityType="Dota2Model.Store.DamageType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Hero" EntityType="Dota2Model.Store.Hero" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="HeroPortraits" EntityType="Dota2Model.Store.HeroPortraits" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Skill" EntityType="Dota2Model.Store.Skill" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SkillImage" EntityType="Dota2Model.Store.SkillImage" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TargetAffectedType" EntityType="Dota2Model.Store.TargetAffectedType" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Hero_0" Association="Dota2Model.Store.FK_Hero_0">
+      <End Role="Skill" EntitySet="Skill" />
+      <End Role="Hero" EntitySet="Hero" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Hero_1" Association="Dota2Model.Store.FK_Hero_1">
+      <End Role="Attributes" EntitySet="Attributes" />
+      <End Role="Hero" EntitySet="Hero" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HeroPortraits_0" Association="Dota2Model.Store.FK_HeroPortraits_0">
+      <End Role="Hero" EntitySet="Hero" />
+      <End Role="HeroPortraits" EntitySet="HeroPortraits" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_0" Association="Dota2Model.Store.FK_Skill_0">
+      <End Role="AbilityType" EntitySet="AbilityType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_1" Association="Dota2Model.Store.FK_Skill_1">
+      <End Role="TargetAffectedType" EntitySet="TargetAffectedType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_2" Association="Dota2Model.Store.FK_Skill_2">
+      <End Role="DamageType" EntitySet="DamageType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SkillImage_0" Association="Dota2Model.Store.FK_SkillImage_0">
+      <End Role="Skill" EntitySet="Skill" />
+      <End Role="SkillImage" EntitySet="SkillImage" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AbilityType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Attributes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Agility" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Intelligence" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Strength" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Damage" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="MoveSpeed" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="Armor" Type="nvarchar" Nullable="false" MaxLength="15" />
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="DamageType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Hero">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="SkillsId" Type="int" Nullable="false" />
+    <Property Name="AttributesId" Type="int" Nullable="false" />
+    <Property Name="Biography" Type="varchar(max)" Nullable="false" />
+    <Property Name="HeroPortraitsId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HeroPortraits">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="HeroId" Type="int" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ManaCostLv1" Type="int" />
+    <Property Name="ManaCostLv2" Type="int" />
+    <Property Name="ManaCostLv3" Type="int" />
+    <Property Name="ManaCostLv4" Type="int" />
+    <Property Name="CoolDownLv1" Type="int" />
+    <Property Name="CoolDownLv2" Type="int" />
+    <Property Name="CoolDownLv3" Type="int" />
+    <Property Name="CoolDownLv4" Type="int" />
+    <Property Name="AbilityTypeId" Type="int" Nullable="false" />
+    <Property Name="TargetAffectedTypeId" Type="int" />
+    <Property Name="DamageTypeId" Type="int" />
+    <Property Name="VideoUrl" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="SkillImage">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="SkillId" Type="int" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TargetAffectedType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Hero_0">
+    <End Role="Skill" Type="Dota2Model.Store.Skill" Multiplicity="1" />
+    <End Role="Hero" Type="Dota2Model.Store.Hero" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hero">
+        <PropertyRef Name="SkillsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Hero_1">
+    <End Role="Attributes" Type="Dota2Model.Store.Attributes" Multiplicity="1" />
+    <End Role="Hero" Type="Dota2Model.Store.Hero" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Attributes">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hero">
+        <PropertyRef Name="AttributesId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HeroPortraits_0">
+    <End Role="Hero" Type="Dota2Model.Store.Hero" Multiplicity="1" />
+    <End Role="HeroPortraits" Type="Dota2Model.Store.HeroPortraits" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hero">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="HeroPortraits">
+        <PropertyRef Name="HeroId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill_0">
+    <End Role="AbilityType" Type="Dota2Model.Store.AbilityType" Multiplicity="1" />
+    <End Role="Skill" Type="Dota2Model.Store.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AbilityType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="AbilityTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill_1">
+    <End Role="TargetAffectedType" Type="Dota2Model.Store.TargetAffectedType" Multiplicity="0..1" />
+    <End Role="Skill" Type="Dota2Model.Store.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TargetAffectedType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="TargetAffectedTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill_2">
+    <End Role="DamageType" Type="Dota2Model.Store.DamageType" Multiplicity="0..1" />
+    <End Role="Skill" Type="Dota2Model.Store.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DamageType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="DamageTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SkillImage_0">
+    <End Role="Skill" Type="Dota2Model.Store.Skill" Multiplicity="1" />
+    <End Role="SkillImage" Type="Dota2Model.Store.SkillImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SkillImage">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

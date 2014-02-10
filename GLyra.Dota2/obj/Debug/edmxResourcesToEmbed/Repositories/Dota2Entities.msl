@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Dota2ModelStoreContainer" CdmEntityContainer="Dota2Entities">
+    <EntitySetMapping Name="AbilityType">
+      <EntityTypeMapping TypeName="Dota2Model.AbilityType">
+        <MappingFragment StoreEntitySet="AbilityType">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Attributes">
+      <EntityTypeMapping TypeName="Dota2Model.Attributes">
+        <MappingFragment StoreEntitySet="Attributes">
+          <ScalarProperty Name="Agility" ColumnName="Agility" />
+          <ScalarProperty Name="Intelligence" ColumnName="Intelligence" />
+          <ScalarProperty Name="Strength" ColumnName="Strength" />
+          <ScalarProperty Name="Damage" ColumnName="Damage" />
+          <ScalarProperty Name="MoveSpeed" ColumnName="MoveSpeed" />
+          <ScalarProperty Name="Armor" ColumnName="Armor" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DamageType">
+      <EntityTypeMapping TypeName="Dota2Model.DamageType">
+        <MappingFragment StoreEntitySet="DamageType">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Hero">
+      <EntityTypeMapping TypeName="Dota2Model.Hero">
+        <MappingFragment StoreEntitySet="Hero">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SkillsId" ColumnName="SkillsId" />
+          <ScalarProperty Name="AttributesId" ColumnName="AttributesId" />
+          <ScalarProperty Name="Biography" ColumnName="Biography" />
+          <ScalarProperty Name="HeroPortraitsId" ColumnName="HeroPortraitsId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HeroPortraits">
+      <EntityTypeMapping TypeName="Dota2Model.HeroPortraits">
+        <MappingFragment StoreEntitySet="HeroPortraits">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="HeroId" ColumnName="HeroId" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skill">
+      <EntityTypeMapping TypeName="Dota2Model.Skill">
+        <MappingFragment StoreEntitySet="Skill">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ManaCostLv1" ColumnName="ManaCostLv1" />
+          <ScalarProperty Name="ManaCostLv2" ColumnName="ManaCostLv2" />
+          <ScalarProperty Name="ManaCostLv3" ColumnName="ManaCostLv3" />
+          <ScalarProperty Name="ManaCostLv4" ColumnName="ManaCostLv4" />
+          <ScalarProperty Name="CoolDownLv1" ColumnName="CoolDownLv1" />
+          <ScalarProperty Name="CoolDownLv2" ColumnName="CoolDownLv2" />
+          <ScalarProperty Name="CoolDownLv3" ColumnName="CoolDownLv3" />
+          <ScalarProperty Name="CoolDownLv4" ColumnName="CoolDownLv4" />
+          <ScalarProperty Name="AbilityTypeId" ColumnName="AbilityTypeId" />
+          <ScalarProperty Name="TargetAffectedTypeId" ColumnName="TargetAffectedTypeId" />
+          <ScalarProperty Name="DamageTypeId" ColumnName="DamageTypeId" />
+          <ScalarProperty Name="VideoUrl" ColumnName="VideoUrl" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SkillImage">
+      <EntityTypeMapping TypeName="Dota2Model.SkillImage">
+        <MappingFragment StoreEntitySet="SkillImage">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="SkillId" ColumnName="SkillId" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TargetAffectedType">
+      <EntityTypeMapping TypeName="Dota2Model.TargetAffectedType">
+        <MappingFragment StoreEntitySet="TargetAffectedType">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

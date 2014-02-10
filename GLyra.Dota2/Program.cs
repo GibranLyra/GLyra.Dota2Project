@@ -16,7 +16,7 @@ namespace Dota.CentralDota
         {            
             //var baseRepo = new BaseRepositoryApi( ConfigurationManager.AppSettings.Get("TestSteamId"));
             //baseRepo.getHeroes();
-            var heroesRepo = new HeroesRepository();
+            var heroesRepo = new HeroDataConverter();
         }
     }
 }

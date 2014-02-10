@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Dota2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AbilityType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Attributes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Agility" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Intelligence" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Strength" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Damage" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="MoveSpeed" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Armor" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DamageType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Hero">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="SkillsId" Type="int" Nullable="false" />
+    <Property Name="AttributesId" Type="int" Nullable="false" />
+    <Property Name="Biography" Type="varchar(max)" Nullable="false" />
+    <Property Name="HeroPortraitsId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HeroPortraits">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="HeroId" Type="int" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ManaCostLv1" Type="int" />
+    <Property Name="ManaCostLv2" Type="int" />
+    <Property Name="ManaCostLv3" Type="int" />
+    <Property Name="ManaCostLv4" Type="int" />
+    <Property Name="CoolDownLv1" Type="decimal" Precision="4" Scale="0" />
+    <Property Name="CoolDownLv2" Type="decimal" Precision="4" Scale="0" />
+    <Property Name="CoolDownLv3" Type="decimal" Precision="4" Scale="0" />
+    <Property Name="CoolDownLv4" Type="decimal" Precision="4" Scale="0" />
+    <Property Name="AbilityTypeId" Type="int" Nullable="false" />
+    <Property Name="TargetAffectedTypeId" Type="int" />
+    <Property Name="DamageTypeId" Type="int" />
+    <Property Name="VideoUrl" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="SkillImage">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="SkillId" Type="int" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TargetAffectedType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Hero_0">
+    <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+    <End Role="Hero" Type="Self.Hero" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hero">
+        <PropertyRef Name="SkillsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Hero_1">
+    <End Role="Attributes" Type="Self.Attributes" Multiplicity="1" />
+    <End Role="Hero" Type="Self.Hero" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Attributes">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Hero">
+        <PropertyRef Name="AttributesId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HeroPortraits_0">
+    <End Role="Hero" Type="Self.Hero" Multiplicity="1" />
+    <End Role="HeroPortraits" Type="Self.HeroPortraits" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hero">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="HeroPortraits">
+        <PropertyRef Name="HeroId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill_0">
+    <End Role="AbilityType" Type="Self.AbilityType" Multiplicity="1" />
+    <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AbilityType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="AbilityTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill_1">
+    <End Role="TargetAffectedType" Type="Self.TargetAffectedType" Multiplicity="0..1" />
+    <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TargetAffectedType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="TargetAffectedTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill_2">
+    <End Role="DamageType" Type="Self.DamageType" Multiplicity="0..1" />
+    <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DamageType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="DamageTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SkillImage_0">
+    <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+    <End Role="SkillImage" Type="Self.SkillImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SkillImage">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Dota2ModelStoreContainer">
+    <EntitySet Name="AbilityType" EntityType="Self.AbilityType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Attributes" EntityType="Self.Attributes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DamageType" EntityType="Self.DamageType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Hero" EntityType="Self.Hero" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HeroPortraits" EntityType="Self.HeroPortraits" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SkillImage" EntityType="Self.SkillImage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TargetAffectedType" EntityType="Self.TargetAffectedType" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Hero_0" Association="Self.FK_Hero_0">
+      <End Role="Skill" EntitySet="Skill" />
+      <End Role="Hero" EntitySet="Hero" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Hero_1" Association="Self.FK_Hero_1">
+      <End Role="Attributes" EntitySet="Attributes" />
+      <End Role="Hero" EntitySet="Hero" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HeroPortraits_0" Association="Self.FK_HeroPortraits_0">
+      <End Role="Hero" EntitySet="Hero" />
+      <End Role="HeroPortraits" EntitySet="HeroPortraits" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_0" Association="Self.FK_Skill_0">
+      <End Role="AbilityType" EntitySet="AbilityType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_1" Association="Self.FK_Skill_1">
+      <End Role="TargetAffectedType" EntitySet="TargetAffectedType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_2" Association="Self.FK_Skill_2">
+      <End Role="DamageType" EntitySet="DamageType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SkillImage_0" Association="Self.FK_SkillImage_0">
+      <End Role="Skill" EntitySet="Skill" />
+      <End Role="SkillImage" EntitySet="SkillImage" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
