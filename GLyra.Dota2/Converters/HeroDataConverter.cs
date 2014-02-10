@@ -1,4 +1,5 @@
 ﻿using GLyra.Dota2.Converters;
+using GLyra.Dota2.Repositories;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -13,62 +14,95 @@ namespace Dota.CentralDota.Repositories
     class HeroDataConverter
     {
         AgilityPackHelper agilityPackHelper;
+        List<string> heroesName = new List<string>();
+        List<string> heroesUrl = new List<string>();
+        List<string> skillImages = new List<string>();
+        List<string> skillNames = new List<string>();
+        List<string> skillDescriptions = new List<string>();
+        List<string> primaryStatsImages = new List<string>();
+        List<string> primaryStatsValues = new List<string>();
+        string biography;
+        List<KeyValuePair<string, string>> manaCostDictionary = new List<KeyValuePair<string, string>>();
+        List<string> coolDownList = new List<string>();
+        List<string> abilityCastType = new List<string>();
+        List<string> skillTargetAffectedType = new List<string>();
+        List<string> skillDamageType = new List<string>();
+        string skillVideo;
+        List<List<string>> skillRemainingValues = new List<List<string>>();
+        HeroCreator heroCreator = new HeroCreator();
+        SkillCreator skillCreator = new SkillCreator();
 
         public HeroDataConverter()
         {
-            var skillImages = new List<string>();
-            var skillNames = new List<string>();
-            var skillDescriptions = new List<string>();
-            var primaryStatsImages = new List<string>();
-            var primaryStatsValues = new List<string>();
-            string biography;
-            var manaCostList = new List<string>();
-            var coolDownList = new List<string>();
-            var abilityCastType = new List<string>();
-            var skillTargetAffectedType = new List<string>();
-            var skillDamageType = new List<string>();
-            var skillVideos = new List<string>();
-            var skillRemainingValues = new List<List<string>>();
-            //TODO Armazenar quantidade de skills que o heroi tem
             agilityPackHelper = new AgilityPackHelper();
-            // load snippet
             HtmlDocument doc = new HtmlDocument();
-            doc = LoadHtmlSnippetFromFile();
 
-            skillImages = GetSkillPortraits(doc);
-            skillNames = GetSkillNames(doc);
-            skillDescriptions = GetSkillDescriptions(doc);
-            primaryStatsImages = GetPrimaryStatsImages(doc);
-            primaryStatsValues = GetPrimaryStatsValues(doc);
-            biography = GetBiography(doc);
-            //TODO Stats(Atributos)
-            manaCostList = GetManaCost(doc);
-            coolDownList = GetCoolDown(doc);
-            abilityCastType = GetAbilityCastType(doc);
-            skillTargetAffectedType = GetSkillTargetAffectedType(doc);
-            skillDamageType = GetSkillDamageType(doc);            
-            skillVideos = GetSkillVideo(doc);
-            skillRemainingValues = GetSkillRemainingValues(doc);
+            heroesName = GetHeroesName();
 
-            for (int i = 0; i < skillNames.Count; i++)
+            foreach (var heroName in heroesName)
             {
-                createSkill(skillNames[i], skillDescriptions[i], manaCostList, coolDownList, abilityCastType[i], skillTargetAffectedType[i], skillDamageType[i], skillVideos.First());
+                doc = LoadHeroHtmlPage(heroName);
+
+                skillImages = GetSkillPortraits(doc);
+                skillNames = GetSkillNames(doc);
+                skillDescriptions = GetSkillDescriptions(doc);
+                primaryStatsImages = GetPrimaryStatsImages(doc);
+                primaryStatsValues = GetPrimaryStatsValues(doc);
+                biography = GetBiography(doc).Trim() ;
+                manaCostDictionary = GetManaCost(doc);
+                coolDownList = GetCoolDown(doc);
+                abilityCastType = GetAbilityCastType(doc);
+                skillTargetAffectedType = GetSkillTargetAffectedType(doc);
+                skillDamageType = GetSkillDamageType(doc);
+                skillVideo = GetSkillVideo(doc);
+                skillRemainingValues = GetSkillRemainingValues(doc);
+
+                heroCreator.createHero(heroName, biography);                
+
+                for (int i = 0; i < skillNames.Count; i++)
+                {
+                    heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType[i],
+                        skillTargetAffectedType[i], skillDamageType[i], skillVideo);
+                }
             }
         }
-            
-        void createSkill(string name, string description, List<string> manaCostList, List<string> coolDownList,
-            string abilityCastType, string targetAffectedType, string damageType, string videoUrl)
-        {
-            SkillCreator sCretor = new SkillCreator(name, description, manaCostList, coolDownList, abilityCastType, targetAffectedType, damageType, videoUrl);
-        }
 
-
-        private HtmlDocument LoadHtmlSnippetFromFile()
+        private HtmlDocument LoadHeroHtmlPage(string heroName)
         {
             HtmlDocument doc = new HtmlDocument();
-            doc.Load(GetStream("http://www.dota2.com/hero/Storm_Spirit/?l=english"));            
+            doc.Load(GetStream("http://www.dota2.com/hero/" + heroName + "/?l=english"));            
 
             return doc;
+        }
+
+        private HtmlDocument LoadHeroesPage()
+        {
+            HtmlDocument doc = new HtmlDocument();
+            doc.Load(GetStream("http://www.dota2.com/heroes/?l=english"));
+
+            return doc;
+        }
+
+        List<string> GetHeroesName()
+        {
+            HtmlDocument doc = LoadHeroesPage();            
+
+            var heroesNameNode = doc.DocumentNode.SelectNodes("//*[(@id = 'filterName')]");
+
+            var namesNode = heroesNameNode.First();
+
+            //Get Heroes Names
+            //Skip 2 because of the filters of steam website (All and HERO NAME)
+            var names = (namesNode.Descendants("option")
+                .Select(e => e.NextSibling.InnerText)).Skip(2);
+
+
+            //Fill the urls by the names of the heros
+            foreach (var name in names)
+            {
+                heroesUrl.Add(name.Replace(" ", "_"));
+            }
+            return  names.ToList();            
         }
 
         List<string> GetSkillPortraits(HtmlDocument doc)
@@ -140,7 +174,7 @@ namespace Dota.CentralDota.Repositories
             foreach (var skillType in skillList)
             {
                 var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
-                AbilityCastTypeList.Add(spanList.First().InnerText);
+                AbilityCastTypeList.Add(spanList.First().InnerText.Trim());
             }
 
             return AbilityCastTypeList;
@@ -236,26 +270,29 @@ namespace Dota.CentralDota.Repositories
             return remainingValues;
         }
 
-        List<string> GetSkillVideo(HtmlDocument doc)
+        string GetSkillVideo(HtmlDocument doc)
         {
             int expectedSize = 1;
-            var skillVideoList = new List<string>();
+            string skillVideo = String.Empty;
 
             var abilityVideoContainer = doc.DocumentNode.SelectNodes("//*[@class = 'abilityVideoContainer']");
 
-            foreach (var video in abilityVideoContainer)
+            if (abilityVideoContainer != null)
             {
-                //Get the skillDescription
-                var skillVideos = video.Descendants("iframe")
-                                    .Select(e => e.GetAttributeValue("src", null));
+                foreach (var video in abilityVideoContainer)
+                {
+                    //Get the skillDescription
+                    var skillVideos = video.Descendants("iframe")
+                                        .Select(e => e.GetAttributeValue("src", null));
 
-                if (skillVideos.Count() > expectedSize)
-                    LogHandler.createWarningLog("overviewAbilityRowDescription-SkillDescription", expectedSize, skillVideos.Count());
+                    if (skillVideos.Count() > expectedSize)
+                        LogHandler.createWarningLog("overviewAbilityRowDescription-SkillDescription", expectedSize, skillVideos.Count());
 
-                skillVideoList.Add(skillVideos.First());
+                    skillVideo = skillVideos.First();
+                }
             }
 
-            return skillVideoList;
+            return skillVideo;
         }
 
         List<string> GetPrimaryStatsImages(HtmlDocument doc)
@@ -298,23 +335,23 @@ namespace Dota.CentralDota.Repositories
             return bio;
         }
 
-        List<string> GetManaCost(HtmlDocument doc)
+        List<KeyValuePair<string, string>> GetManaCost(HtmlDocument doc)
         {
-            var manaCostList = new List<string>();
-
+            var manaCostDictionary = new List<KeyValuePair<string, string>>();            
             var mana = doc.DocumentNode.SelectNodes("//*[@class = 'mana']");
 
+            //Get the name of the skill
+            string skillName = mana.First().ParentNode.ParentNode.ParentNode.Descendants("h2").First().InnerText;
             foreach (var manaCost in mana)
             {
                 //Search for the span in the node
                 var spanManaCost = manaCost.Descendants("span");
                 //Remove the span that contains the text "Mana Cost: "
                 manaCost.RemoveChild(spanManaCost.First());
-
-                manaCostList.Add(manaCost.InnerText);                
-            }
-            
-            return manaCostList;
+                var manaCostKeyValue = new KeyValuePair<string, string>(skillName, manaCost.InnerText);
+                manaCostDictionary.Add(manaCostKeyValue);
+            }            
+            return manaCostDictionary;
         }
 
         List<string> GetCoolDown(HtmlDocument doc)

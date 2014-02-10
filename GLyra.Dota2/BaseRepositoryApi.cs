@@ -75,7 +75,7 @@ namespace Dota.CentralDota
         {
             SteamInterface = "IEconDota2" + SteamInterface;
             //TODO create a localization rule: https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v0001/?key=<key>&language=en_us
-            GetAPIResult<object>(SteamInterface, "GetHeroes", APIVersion.v0001, this.SteamId);
+            object heroResult = GetAPIResult<object>(SteamInterface, "GetHeroes", APIVersion.v0001, this.SteamId);
         }
     }
 }

@@ -10,18 +10,20 @@ namespace GLyra.Dota2.Converters
     public class SkillCreator
     {
         Skill skill;
-        public SkillCreator(string name, string description, List<string> manaCostList, List<string> coolDownList,
+
+        public Skill createSkill(int heroId, string name, string description, List<KeyValuePair<string, string>> manaCostList, List<string> coolDownList,
             string abilityCastType, string targetAffectedType, string damageType, string videoUrl)
         {
             this.skill = new Skill();
 
+            this.skill.HeroId = heroId;
             this.skill.Name = name;
             this.skill.Description = description;
             this.skill.VideoUrl = videoUrl;
             //Set Up ManaCost
             foreach (var manaCost in manaCostList)
             {
-                setManaCost(manaCost);
+                setManaCost(manaCost.Value);
             }
 
             //Set up CoolDowns
@@ -38,6 +40,8 @@ namespace GLyra.Dota2.Converters
 
             if (!string.IsNullOrEmpty(damageType))
                 setDamageType(damageType);
+
+            return this.skill;
 
         }
 

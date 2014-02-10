@@ -27,6 +27,10 @@ namespace Dota.CentralDota
                                     .Select(e => e.GetAttributeValue("src", null))
                                     .Where(s => !String.IsNullOrEmpty(s));
 
+                //Exemplo de 2 wheres
+                //.Where(s => s.InnerText == "a")
+                //                    .Where(s => s.InnerText ==  "b")                                    
+                //                    .Select(e => e.GetAttributeValue("src", null));
 
                 //Create a log if the return number isnot the expected
                 if (imgUrls.Count() != expectedSize)

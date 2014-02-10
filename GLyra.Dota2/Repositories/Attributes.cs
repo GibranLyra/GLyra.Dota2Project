@@ -14,11 +14,6 @@ namespace GLyra.Dota2.Repositories
     
     public partial class Attributes
     {
-        public Attributes()
-        {
-            this.Hero = new HashSet<Hero>();
-        }
-    
         public string Agility { get; set; }
         public string Intelligence { get; set; }
         public string Strength { get; set; }
@@ -26,7 +21,8 @@ namespace GLyra.Dota2.Repositories
         public string MoveSpeed { get; set; }
         public string Armor { get; set; }
         public int ID { get; set; }
+        public int HeroId { get; set; }
     
-        public virtual ICollection<Hero> Hero { get; set; }
+        public virtual Hero Hero { get; set; }
     }
 }

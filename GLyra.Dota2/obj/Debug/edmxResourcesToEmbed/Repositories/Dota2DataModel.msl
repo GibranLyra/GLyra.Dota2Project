@@ -19,6 +19,7 @@
           <ScalarProperty Name="MoveSpeed" ColumnName="MoveSpeed" />
           <ScalarProperty Name="Armor" ColumnName="Armor" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="HeroId" ColumnName="HeroId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -35,8 +36,6 @@
         <MappingFragment StoreEntitySet="Hero">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="SkillsId" ColumnName="SkillsId" />
-          <ScalarProperty Name="AttributesId" ColumnName="AttributesId" />
           <ScalarProperty Name="Biography" ColumnName="Biography" />
           <ScalarProperty Name="HeroPortraitsId" ColumnName="HeroPortraitsId" />
         </MappingFragment>
@@ -69,6 +68,7 @@
           <ScalarProperty Name="TargetAffectedTypeId" ColumnName="TargetAffectedTypeId" />
           <ScalarProperty Name="DamageTypeId" ColumnName="DamageTypeId" />
           <ScalarProperty Name="VideoUrl" ColumnName="VideoUrl" />
+          <ScalarProperty Name="HeroId" ColumnName="HeroId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -16,18 +16,18 @@ namespace GLyra.Dota2.Repositories
     {
         public Hero()
         {
+            this.Attributes = new HashSet<Attributes>();
             this.HeroPortraits = new HashSet<HeroPortraits>();
+            this.Skill = new HashSet<Skill>();
         }
     
         public int ID { get; set; }
         public string Name { get; set; }
-        public int SkillsId { get; set; }
-        public int AttributesId { get; set; }
         public string Biography { get; set; }
-        public int HeroPortraitsId { get; set; }
+        public Nullable<int> HeroPortraitsId { get; set; }
     
-        public virtual Attributes Attributes { get; set; }
-        public virtual Skill Skill { get; set; }
+        public virtual ICollection<Attributes> Attributes { get; set; }
         public virtual ICollection<HeroPortraits> HeroPortraits { get; set; }
+        public virtual ICollection<Skill> Skill { get; set; }
     }
 }

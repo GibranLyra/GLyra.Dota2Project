@@ -18,6 +18,7 @@
     <Property Name="MoveSpeed" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="Armor" Type="nvarchar" MaxLength="15" Nullable="false" />
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HeroId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="DamageType">
     <Key>
@@ -32,10 +33,8 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="SkillsId" Type="int" Nullable="false" />
-    <Property Name="AttributesId" Type="int" Nullable="false" />
     <Property Name="Biography" Type="varchar(max)" Nullable="false" />
-    <Property Name="HeroPortraitsId" Type="int" Nullable="false" />
+    <Property Name="HeroPortraitsId" Type="int" />
   </EntityType>
   <EntityType Name="HeroPortraits">
     <Key>
@@ -64,6 +63,7 @@
     <Property Name="TargetAffectedTypeId" Type="int" />
     <Property Name="DamageTypeId" Type="int" />
     <Property Name="VideoUrl" Type="nvarchar(max)" />
+    <Property Name="HeroId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="SkillImage">
     <Key>
@@ -80,27 +80,15 @@
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
-  <Association Name="FK_Hero_0">
-    <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
-    <End Role="Hero" Type="Self.Hero" Multiplicity="*" />
+  <Association Name="FK_Attributes_0">
+    <End Role="Hero" Type="Self.Hero" Multiplicity="1" />
+    <End Role="Attributes" Type="Self.Attributes" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Skill">
+      <Principal Role="Hero">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="Hero">
-        <PropertyRef Name="SkillsId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Hero_1">
-    <End Role="Attributes" Type="Self.Attributes" Multiplicity="1" />
-    <End Role="Hero" Type="Self.Hero" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Attributes">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Hero">
-        <PropertyRef Name="AttributesId" />
+      <Dependent Role="Attributes">
+        <PropertyRef Name="HeroId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -152,6 +140,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Skill_3">
+    <End Role="Hero" Type="Self.Hero" Multiplicity="1" />
+    <End Role="Skill" Type="Self.Skill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hero">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Skill">
+        <PropertyRef Name="HeroId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SkillImage_0">
     <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
     <End Role="SkillImage" Type="Self.SkillImage" Multiplicity="*" />
@@ -173,13 +173,9 @@
     <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SkillImage" EntityType="Self.SkillImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TargetAffectedType" EntityType="Self.TargetAffectedType" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Hero_0" Association="Self.FK_Hero_0">
-      <End Role="Skill" EntitySet="Skill" />
+    <AssociationSet Name="FK_Attributes_0" Association="Self.FK_Attributes_0">
       <End Role="Hero" EntitySet="Hero" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Hero_1" Association="Self.FK_Hero_1">
       <End Role="Attributes" EntitySet="Attributes" />
-      <End Role="Hero" EntitySet="Hero" />
     </AssociationSet>
     <AssociationSet Name="FK_HeroPortraits_0" Association="Self.FK_HeroPortraits_0">
       <End Role="Hero" EntitySet="Hero" />
@@ -195,6 +191,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_Skill_2" Association="Self.FK_Skill_2">
       <End Role="DamageType" EntitySet="DamageType" />
+      <End Role="Skill" EntitySet="Skill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill_3" Association="Self.FK_Skill_3">
+      <End Role="Hero" EntitySet="Hero" />
       <End Role="Skill" EntitySet="Skill" />
     </AssociationSet>
     <AssociationSet Name="FK_SkillImage_0" Association="Self.FK_SkillImage_0">

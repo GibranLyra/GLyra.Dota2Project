@@ -16,7 +16,6 @@ namespace GLyra.Dota2.Repositories
     {
         public Skill()
         {
-            this.Hero = new HashSet<Hero>();
             this.SkillImage = new HashSet<SkillImage>();
         }
     
@@ -35,10 +34,11 @@ namespace GLyra.Dota2.Repositories
         public Nullable<int> TargetAffectedTypeId { get; set; }
         public Nullable<int> DamageTypeId { get; set; }
         public string VideoUrl { get; set; }
+        public int HeroId { get; set; }
     
         public virtual AbilityType AbilityType { get; set; }
         public virtual DamageType DamageType { get; set; }
-        public virtual ICollection<Hero> Hero { get; set; }
+        public virtual Hero Hero { get; set; }
         public virtual TargetAffectedType TargetAffectedType { get; set; }
         public virtual ICollection<SkillImage> SkillImage { get; set; }
     }
