@@ -15,62 +15,41 @@ namespace Dota.CentralDota.Repositories
     class HeroDataConverter
     {
         AgilityPackHelper agilityPackHelper;
-        List<string> heroesName ;
-        List<string> heroesUrl;
-        List<string> skillImages;
-        List<string> skillNames;
-        List<string> skillDescriptions;
-        List<string> primaryStatsImages;
-        Dictionary<string, string> primaryStatsValues;
+        List<string> heroesName = new List<string>();
+        List<string> heroesUrl = new List<string>();
+        List<string> skillImages = new List<string>();
+        List<string> skillNames = new List<string>();
+        List<string> skillDescriptions = new List<string>();
+        List<string> primaryStatsImages = new List<string>();
+        Dictionary<string,string> primaryStatsValues = new Dictionary<string,string>();
         string biography;
-        List<KeyValuePair<string, string>> manaCostDictionary;
-        List<KeyValuePair<string, string>> coolDownList;
-        List<KeyValuePair<string, string>> abilityCastType;
-        List<KeyValuePair<string, string>> skillTargetAffectedType;
-        List<KeyValuePair<string, string>> skillDamageType;
+        List<KeyValuePair<string, string>> manaCostDictionary = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> coolDownList = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> abilityCastType = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> skillTargetAffectedType = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> skillDamageType = new List<KeyValuePair<string, string>>();
         string skillVideo;
-        List<List<string>> skillRemainingValues;
-        HeroCreator heroCreator;
-        SkillCreator skillCreator;
+        List<List<string>> skillRemainingValues = new List<List<string>>();
+        HeroCreator heroCreator = new HeroCreator();
+        SkillCreator skillCreator = new SkillCreator();
 
         public HeroDataConverter()
         {
-            heroesName = new List<string>();
-            heroesUrl = new List<string>();
-            skillImages = new List<string>();
-            skillNames = new List<string>();
-            skillDescriptions = new List<string>();
-            primaryStatsImages = new List<string>();
-            primaryStatsValues = new Dictionary<string, string>();
-            manaCostDictionary = new List<KeyValuePair<string, string>>();
-            coolDownList = new List<KeyValuePair<string, string>>();
-            abilityCastType = new List<KeyValuePair<string, string>>();
-            skillTargetAffectedType = new List<KeyValuePair<string, string>>();
-            skillDamageType = new List<KeyValuePair<string, string>>();
-            skillRemainingValues = new List<List<string>>();
-            heroCreator = new HeroCreator();
-            skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
-
-            getDataFromHtml();
-        }
-
-        private void getDataFromHtml()
-        {
             HtmlDocument doc = new HtmlDocument();
 
             heroesName = GetHeroesName();
 
             foreach (var heroName in heroesName)
             {
-                doc = LoadHeroHtmlPage(heroName);
+                doc = LoadHeroHtmlPage(heroName);                
 
                 skillImages = GetSkillPortraits(doc);
                 skillNames = GetSkillNames(doc);
                 skillDescriptions = GetSkillDescriptions(doc);
                 primaryStatsImages = GetPrimaryStatsImages(doc);
                 primaryStatsValues = GetPrimaryStatsValues(doc);
-                biography = GetBiography(doc).Trim();
+                biography = GetBiography(doc).Trim() ;
                 manaCostDictionary = GetManaCost(doc);
                 coolDownList = GetCoolDown(doc);
                 abilityCastType = GetAbilityCastType(doc);
@@ -313,7 +292,6 @@ namespace Dota.CentralDota.Repositories
                     if (descriptionList.Count <= 0)
                     {
                         HtmlNode htmlNode = remainingValue.ChildNodes.Where(x => x.Name == "#text").First();
-                        skillDescriptionList.Add(htmlNode.InnerText.Trim());
                     }
 
                     else
@@ -342,10 +320,12 @@ namespace Dota.CentralDota.Repositories
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }                    
+                    }
+
+
+                    remainingValues.Add(skillDescriptionList);
+                    remainingValues.Add(skillValuesList);
                 }
-                remainingValues.Add(skillDescriptionList);
-                remainingValues.Add(skillValuesList);
             }
 
             return remainingValues;

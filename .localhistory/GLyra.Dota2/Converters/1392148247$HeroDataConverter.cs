@@ -50,9 +50,7 @@ namespace Dota.CentralDota.Repositories
             skillRemainingValues = new List<List<string>>();
             heroCreator = new HeroCreator();
             skillCreator = new SkillCreator();
-            agilityPackHelper = new AgilityPackHelper();
-
-            getDataFromHtml();
+            agilityPackHelper = new AgilityPackHelper();            
         }
 
         private void getDataFromHtml()
@@ -342,10 +340,12 @@ namespace Dota.CentralDota.Repositories
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }                    
+                    }
+
+
+                    remainingValues.Add(skillDescriptionList);
+                    remainingValues.Add(skillValuesList);
                 }
-                remainingValues.Add(skillDescriptionList);
-                remainingValues.Add(skillValuesList);
             }
 
             return remainingValues;

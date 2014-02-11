@@ -15,62 +15,41 @@ namespace Dota.CentralDota.Repositories
     class HeroDataConverter
     {
         AgilityPackHelper agilityPackHelper;
-        List<string> heroesName ;
-        List<string> heroesUrl;
-        List<string> skillImages;
-        List<string> skillNames;
-        List<string> skillDescriptions;
-        List<string> primaryStatsImages;
-        Dictionary<string, string> primaryStatsValues;
+        List<string> heroesName = new List<string>();
+        List<string> heroesUrl = new List<string>();
+        List<string> skillImages = new List<string>();
+        List<string> skillNames = new List<string>();
+        List<string> skillDescriptions = new List<string>();
+        List<string> primaryStatsImages = new List<string>();
+        Dictionary<string,string> primaryStatsValues = new Dictionary<string,string>();
         string biography;
-        List<KeyValuePair<string, string>> manaCostDictionary;
-        List<KeyValuePair<string, string>> coolDownList;
-        List<KeyValuePair<string, string>> abilityCastType;
-        List<KeyValuePair<string, string>> skillTargetAffectedType;
-        List<KeyValuePair<string, string>> skillDamageType;
+        List<KeyValuePair<string, string>> manaCostDictionary = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> coolDownList = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> abilityCastType = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> skillTargetAffectedType = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> skillDamageType = new List<KeyValuePair<string, string>>();
         string skillVideo;
-        List<List<string>> skillRemainingValues;
-        HeroCreator heroCreator;
-        SkillCreator skillCreator;
+        List<List<string>> skillRemainingValues = new List<List<string>>();
+        HeroCreator heroCreator = new HeroCreator();
+        SkillCreator skillCreator = new SkillCreator();
 
         public HeroDataConverter()
         {
-            heroesName = new List<string>();
-            heroesUrl = new List<string>();
-            skillImages = new List<string>();
-            skillNames = new List<string>();
-            skillDescriptions = new List<string>();
-            primaryStatsImages = new List<string>();
-            primaryStatsValues = new Dictionary<string, string>();
-            manaCostDictionary = new List<KeyValuePair<string, string>>();
-            coolDownList = new List<KeyValuePair<string, string>>();
-            abilityCastType = new List<KeyValuePair<string, string>>();
-            skillTargetAffectedType = new List<KeyValuePair<string, string>>();
-            skillDamageType = new List<KeyValuePair<string, string>>();
-            skillRemainingValues = new List<List<string>>();
-            heroCreator = new HeroCreator();
-            skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
-
-            getDataFromHtml();
-        }
-
-        private void getDataFromHtml()
-        {
             HtmlDocument doc = new HtmlDocument();
 
             heroesName = GetHeroesName();
 
             foreach (var heroName in heroesName)
             {
-                doc = LoadHeroHtmlPage(heroName);
+                doc = LoadHeroHtmlPage(heroName);                
 
                 skillImages = GetSkillPortraits(doc);
                 skillNames = GetSkillNames(doc);
                 skillDescriptions = GetSkillDescriptions(doc);
                 primaryStatsImages = GetPrimaryStatsImages(doc);
                 primaryStatsValues = GetPrimaryStatsValues(doc);
-                biography = GetBiography(doc).Trim();
+                biography = GetBiography(doc).Trim() ;
                 manaCostDictionary = GetManaCost(doc);
                 coolDownList = GetCoolDown(doc);
                 abilityCastType = GetAbilityCastType(doc);
@@ -293,8 +272,6 @@ namespace Dota.CentralDota.Repositories
         List<List<string>> GetSkillRemainingValues(HtmlDocument doc)
         {
             var remainingValues = new List<List<string>>();
-            var skillDescriptionList = new List<string>();//Onde ficam as descrições do que a skill faz
-            var skillValuesList = new List<string>(); //Onde ficam os valores do que a skill faz
 
             var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
 
@@ -304,48 +281,42 @@ namespace Dota.CentralDota.Repositories
                 if (divInnerHtml != null)
                 {
                     var descriptionList = divInnerHtml.Where(x => x.Name == "br").ToList();
-
                     var valuesList = divInnerHtml.Where(x => x.Name == "span")
                                                  .Where(x => x.Attributes["class"].Value != "scepterVal");
 
-                    //In case that no tag "br" exists, it means that the skill has only one description
-                    //So we need to get the value inside the div tag
-                    if (descriptionList.Count <= 0)
-                    {
-                        HtmlNode htmlNode = remainingValue.ChildNodes.Where(x => x.Name == "#text").First();
-                        skillDescriptionList.Add(htmlNode.InnerText.Trim());
-                    }
 
-                    else
+                    var skillDescriptionList = new List<string>();//Onde ficam as descrições do que a skill faz
+                    var skillValuesList = new List<string>(); //Onde ficam os valores do que a skill faz
+
+                    for (int i = 0; i < descriptionList.Count; i++)
                     {
-                        for (int i = 0; i < descriptionList.Count; i++)
+                        //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
+                        if (i == 0)
+                            skillDescriptionList.Add(descriptionList[i].PreviousSibling.PreviousSibling.InnerText.Trim());
+
+                        if (descriptionList.Count > 1)
                         {
-                            //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
-                            if (i == 0)
-                                skillDescriptionList.Add(descriptionList[i].PreviousSibling.PreviousSibling.InnerText.Trim());
-
-                            if (descriptionList.Count > 1)
+                            //When the value is "" the skill must be a scepter upgrade, so we need to check the scepterVal class
+                            if (descriptionList[i].NextSibling.InnerText.Trim() == "")
                             {
-                                //When the value is "" the skill must be a scepter upgrade, so we need to check the scepterVal class
-                                if (descriptionList[i].NextSibling.InnerText.Trim() == "")
-                                {
-                                    skillDescriptionList.Add(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
-                                    divInnerHtml.Remove(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
-                                }
-                                else
-                                    skillDescriptionList.Add(descriptionList[i].NextSibling.InnerText.Trim());
+                                skillDescriptionList.Add(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
+                                divInnerHtml.Remove(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
                             }
-
+                            else
+                                skillDescriptionList.Add(descriptionList[i].NextSibling.InnerText.Trim());
                         }
+
                     }
 
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }                    
+                    }
+
+
+                    remainingValues.Add(skillDescriptionList);
+                    remainingValues.Add(skillValuesList);
                 }
-                remainingValues.Add(skillDescriptionList);
-                remainingValues.Add(skillValuesList);
             }
 
             return remainingValues;

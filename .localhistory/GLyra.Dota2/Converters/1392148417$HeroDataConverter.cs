@@ -342,10 +342,12 @@ namespace Dota.CentralDota.Repositories
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }                    
+                    }
+
+
+                    remainingValues.Add(skillDescriptionList);
+                    remainingValues.Add(skillValuesList);
                 }
-                remainingValues.Add(skillDescriptionList);
-                remainingValues.Add(skillValuesList);
             }
 
             return remainingValues;
