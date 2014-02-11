@@ -29,7 +29,7 @@ namespace Dota.CentralDota.Repositories
         List<KeyValuePair<string, string>> skillTargetAffectedType;
         List<KeyValuePair<string, string>> skillDamageType;
         string skillVideo;
-        Dictionary<string, Dictionary<string, string>> skillRemainingValues;
+        List<List<string>> skillRemainingValues;
         HeroCreator heroCreator;
         SkillCreator skillCreator;
 
@@ -47,7 +47,7 @@ namespace Dota.CentralDota.Repositories
             abilityCastType = new List<KeyValuePair<string, string>>();
             skillTargetAffectedType = new List<KeyValuePair<string, string>>();
             skillDamageType = new List<KeyValuePair<string, string>>();
-            skillRemainingValues = new Dictionary<string, Dictionary<string, string>>();
+            skillRemainingValues = new List<List<string>>();
             heroCreator = new HeroCreator();
             skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
@@ -290,26 +290,17 @@ namespace Dota.CentralDota.Repositories
             return damageTypeList;
         }
 
-        Dictionary<string, Dictionary<string, string>> GetSkillRemainingValues(HtmlDocument doc)
+        List<List<string>> GetSkillRemainingValues(HtmlDocument doc)
         {
-            var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
+            var remainingValues = new List<List<string>>();
+            var skillDescriptionList = new List<string>();//Onde ficam as descrições do que a skill faz
+            var skillValuesList = new List<string>(); //Onde ficam os valores do que a skill faz
 
-            var skillNameList = new List<string>();//Where the skillNames are
-            
-
-            //We need to take this nodelist to get the skillName of the remaining values
-            var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
-
-            //The node that the remaining values are
             var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
 
-            for (int i = 0; i < abilityFooterBoxRight.Count; i++)
-			{
-                var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
-                var skillValuesList = new List<string>(); //Where the values of the skills are
-
-                var divInnerHtml = abilityFooterBoxRight[i].SelectNodes(".//*[contains(@span, '')]");
-
+            foreach (var remainingValue in abilityFooterBoxRight)
+            {
+                var divInnerHtml = remainingValue.SelectNodes(".//*[contains(@span, '')]");
                 if (divInnerHtml != null)
                 {
                     var descriptionList = divInnerHtml.Where(x => x.Name == "br").ToList();
@@ -317,37 +308,32 @@ namespace Dota.CentralDota.Repositories
                     var valuesList = divInnerHtml.Where(x => x.Name == "span")
                                                  .Where(x => x.Attributes["class"].Value != "scepterVal");
 
-                    //Get the name of the skills that the current remanining values are
-                    skillNameList.Add(abilityHeaderRowDescription[i].ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim());
-
                     //In case that no tag "br" exists, it means that the skill has only one description
                     //So we need to get the value inside the div tag
                     if (descriptionList.Count <= 0)
                     {
-                        HtmlNode htmlNode = abilityFooterBoxRight[i].ChildNodes.Where(x => x.Name == "#text").First();
-
-                        
+                        HtmlNode htmlNode = remainingValue.ChildNodes.Where(x => x.Name == "#text").First();
                         skillDescriptionList.Add(htmlNode.InnerText.Trim());
                     }
 
                     else
                     {
-                        for (int it = 0; it < descriptionList.Count; it++)
+                        for (int i = 0; i < descriptionList.Count; i++)
                         {
                             //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
-                            if (it == 0)
-                                skillDescriptionList.Add(descriptionList[it].PreviousSibling.PreviousSibling.InnerText.Trim());
+                            if (i == 0)
+                                skillDescriptionList.Add(descriptionList[i].PreviousSibling.PreviousSibling.InnerText.Trim());
 
                             if (descriptionList.Count > 1)
                             {
                                 //When the value is "" the skill must be a scepter upgrade, so we need to check the scepterVal class
-                                if (descriptionList[it].NextSibling.InnerText.Trim() == "")
+                                if (descriptionList[i].NextSibling.InnerText.Trim() == "")
                                 {
-                                    skillDescriptionList.Add(descriptionList[it].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
-                                    divInnerHtml.Remove(descriptionList[it].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
+                                    skillDescriptionList.Add(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
+                                    divInnerHtml.Remove(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
                                 }
                                 else
-                                    skillDescriptionList.Add(descriptionList[it].NextSibling.InnerText.Trim());
+                                    skillDescriptionList.Add(descriptionList[i].NextSibling.InnerText.Trim());
                             }
 
                         }
@@ -356,29 +342,13 @@ namespace Dota.CentralDota.Repositories
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }
-                    Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
-
-                    for (int ix = 0; ix < skillDescriptionList.Count; ix++)
-                    {
-                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
-                    }
-                    
-                    dicRemainingValues.Add(skillNameList[i], dicDescValue);
+                    }                    
                 }
-                //remainingValues.Add(skillDescriptionList);
-                //remainingValues.Add(skillValuesList);
+                remainingValues.Add(skillDescriptionList);
+                remainingValues.Add(skillValuesList);
             }
 
-            //Fill the dictionary with data
-            //Data is Key Name
-            //Another dictionary with Description and values
-            foreach (var skillName in skillNameList)
-	        {
-                
-	        }
-            
-            return dicRemainingValues;
+            return remainingValues;
         }
 
         string GetSkillVideo(HtmlDocument doc)

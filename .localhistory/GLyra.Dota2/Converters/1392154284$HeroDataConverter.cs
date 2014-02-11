@@ -358,11 +358,8 @@ namespace Dota.CentralDota.Repositories
                         skillValuesList.Add(span.InnerText.Trim());
                     }
                     Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
-
-                    for (int ix = 0; ix < skillDescriptionList.Count; ix++)
-                    {
-                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
-                    }
+                    
+                    dicDescValue.Add(skillDescriptionList[i], skillValuesList[i]);
                     
                     dicRemainingValues.Add(skillNameList[i], dicDescValue);
                 }

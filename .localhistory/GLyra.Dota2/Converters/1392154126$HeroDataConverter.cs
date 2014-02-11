@@ -295,7 +295,8 @@ namespace Dota.CentralDota.Repositories
             var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
 
             var skillNameList = new List<string>();//Where the skillNames are
-            
+            var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
+            var skillValuesList = new List<string>(); //Where the values of the skills are
 
             //We need to take this nodelist to get the skillName of the remaining values
             var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
@@ -305,9 +306,6 @@ namespace Dota.CentralDota.Repositories
 
             for (int i = 0; i < abilityFooterBoxRight.Count; i++)
 			{
-                var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
-                var skillValuesList = new List<string>(); //Where the values of the skills are
-
                 var divInnerHtml = abilityFooterBoxRight[i].SelectNodes(".//*[contains(@span, '')]");
 
                 if (divInnerHtml != null)
@@ -358,11 +356,8 @@ namespace Dota.CentralDota.Repositories
                         skillValuesList.Add(span.InnerText.Trim());
                     }
                     Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
-
-                    for (int ix = 0; ix < skillDescriptionList.Count; ix++)
-                    {
-                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
-                    }
+                    
+                    dicDescValue.Add(skillDescriptionList[i], skillValuesList[i]);
                     
                     dicRemainingValues.Add(skillNameList[i], dicDescValue);
                 }

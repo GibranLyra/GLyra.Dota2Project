@@ -361,7 +361,7 @@ namespace Dota.CentralDota.Repositories
 
                     for (int ix = 0; ix < skillDescriptionList.Count; ix++)
                     {
-                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
+                        dicDescValue.Add(skillDescriptionList[i], skillValuesList[i]);    
                     }
                     
                     dicRemainingValues.Add(skillNameList[i], dicDescValue);

@@ -292,22 +292,17 @@ namespace Dota.CentralDota.Repositories
 
         Dictionary<string, Dictionary<string, string>> GetSkillRemainingValues(HtmlDocument doc)
         {
-            var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
+            var remainingValues = new Dictionary<string, Dictionary<string, string>>();
 
-            var skillNameList = new List<string>();//Where the skillNames are
-            
+            var skillNamesList = new List<string>();//Where the skillNames are
+            var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
+            var skillValuesList = new List<string>(); //Where the values of the skills are
 
-            //We need to take this nodelist to get the skillName of the remaining values
             var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
-
-            //The node that the remaining values are
             var abilityFooterBoxRight = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxRight']");
 
             for (int i = 0; i < abilityFooterBoxRight.Count; i++)
 			{
-                var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
-                var skillValuesList = new List<string>(); //Where the values of the skills are
-
                 var divInnerHtml = abilityFooterBoxRight[i].SelectNodes(".//*[contains(@span, '')]");
 
                 if (divInnerHtml != null)
@@ -317,17 +312,22 @@ namespace Dota.CentralDota.Repositories
                     var valuesList = divInnerHtml.Where(x => x.Name == "span")
                                                  .Where(x => x.Attributes["class"].Value != "scepterVal");
 
-                    //Get the name of the skills that the current remanining values are
-                    skillNameList.Add(abilityHeaderRowDescription[i].ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim());
-
                     //In case that no tag "br" exists, it means that the skill has only one description
                     //So we need to get the value inside the div tag
                     if (descriptionList.Count <= 0)
                     {
                         HtmlNode htmlNode = abilityFooterBoxRight[i].ChildNodes.Where(x => x.Name == "#text").First();
 
-                        
-                        skillDescriptionList.Add(htmlNode.InnerText.Trim());
+                        foreach (var item in abilityHeaderRowDescription[0].ChildNodes[3].ChildNodes)
+	                    {
+	                        Debug.WriteLine(item.Name);
+	                    }
+                        skillNamesList.Add(abilityHeaderRowDescription[0].ChildNodes[3].ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim());
+
+                        //abilityHeaderBox[0].ChildNodes.Where(x => x.Name  InnerText
+                        //abilityHeaderBox.Where(x => x.Name )
+
+                        //skillDescriptionList.Add(htmlNode.InnerText.Trim());
                     }
 
                     else
@@ -356,29 +356,13 @@ namespace Dota.CentralDota.Repositories
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }
-                    Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
-
-                    for (int ix = 0; ix < skillDescriptionList.Count; ix++)
-                    {
-                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
-                    }
-                    
-                    dicRemainingValues.Add(skillNameList[i], dicDescValue);
+                    }                    
                 }
                 //remainingValues.Add(skillDescriptionList);
                 //remainingValues.Add(skillValuesList);
             }
 
-            //Fill the dictionary with data
-            //Data is Key Name
-            //Another dictionary with Description and values
-            foreach (var skillName in skillNameList)
-	        {
-                
-	        }
-            
-            return dicRemainingValues;
+            return remainingValues;
         }
 
         string GetSkillVideo(HtmlDocument doc)

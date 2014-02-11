@@ -295,7 +295,8 @@ namespace Dota.CentralDota.Repositories
             var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
 
             var skillNameList = new List<string>();//Where the skillNames are
-            
+            var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
+            var skillValuesList = new List<string>(); //Where the values of the skills are
 
             //We need to take this nodelist to get the skillName of the remaining values
             var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
@@ -305,9 +306,6 @@ namespace Dota.CentralDota.Repositories
 
             for (int i = 0; i < abilityFooterBoxRight.Count; i++)
 			{
-                var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
-                var skillValuesList = new List<string>(); //Where the values of the skills are
-
                 var divInnerHtml = abilityFooterBoxRight[i].SelectNodes(".//*[contains(@span, '')]");
 
                 if (divInnerHtml != null)
@@ -356,15 +354,7 @@ namespace Dota.CentralDota.Repositories
                     foreach (var span in valuesList)
                     {
                         skillValuesList.Add(span.InnerText.Trim());
-                    }
-                    Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
-
-                    for (int ix = 0; ix < skillDescriptionList.Count; ix++)
-                    {
-                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
-                    }
-                    
-                    dicRemainingValues.Add(skillNameList[i], dicDescValue);
+                    }                    
                 }
                 //remainingValues.Add(skillDescriptionList);
                 //remainingValues.Add(skillValuesList);
@@ -375,7 +365,12 @@ namespace Dota.CentralDota.Repositories
             //Another dictionary with Description and values
             foreach (var skillName in skillNameList)
 	        {
-                
+                Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
+                for (int i = 0; i < skillDescriptionList.Count; i++)
+                {                    
+                    dicDescValue.Add(skillDescriptionList[i], skillValuesList[i]);
+                }
+                dicRemainingValues.Add(skillName, dicDescValue);
 	        }
             
             return dicRemainingValues;
