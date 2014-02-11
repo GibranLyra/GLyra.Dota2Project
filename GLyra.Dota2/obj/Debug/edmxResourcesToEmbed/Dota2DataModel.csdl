@@ -199,7 +199,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="Dota2Entities" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="Dota2Entities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="AbilityType" EntityType="Self.AbilityType" />
     <EntitySet Name="Attributes" EntityType="Self.Attributes" />
     <EntitySet Name="DamageType" EntityType="Self.DamageType" />

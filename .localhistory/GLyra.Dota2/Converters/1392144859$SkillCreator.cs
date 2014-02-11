@@ -138,7 +138,6 @@ namespace GLyra.Dota2.Converters
 					 }
 					 catch (Exception e)
 					 {
-						 //TODO Incluir erro no log
 						 throw e;
 					 }
 				 }
@@ -197,22 +196,22 @@ namespace GLyra.Dota2.Converters
 		Skill insertSkill()
 		{
 			SkillAbilityTypesCreator skillAbilityTypesCreator = new SkillAbilityTypesCreator();
-			bool isSkillAbilityTypeInserted = false;
+            bool isSkillAbilityTypeInserted = false;
 			using (Dota2Entities ctx = new Dota2Entities())
 			{
 				try
 				{
 					ctx.Skill.Add(this.skill);
-					ctx.SaveChanges();
+                    ctx.SaveChanges();
 					foreach (var abilityType in abilityTypeList)
 					{
-						skillAbilityTypesCreator.insert(this.skill.ID, abilityType.ID, out isSkillAbilityTypeInserted);
-						//If we have a error when inserting SkillAbilityType, then delete the inserted skill
-						if(!isSkillAbilityTypeInserted)
-						{
-							//TODO Create a function to remove all the SkillAbilityTypes that have been created for this skill
-							ctx.Skill.Remove(this.skill);
-						}
+                        skillAbilityTypesCreator.insert(this.skill.ID, abilityType.ID, out isSkillAbilityTypeInserted);
+                        //If we have a error when inserting SkillAbilityType, then delete the inserted skill
+                        if(!isSkillAbilityTypeInserted)
+                        {
+                            //TODO Create a function to remove all the SkillAbilityTypes that have been created for this skill
+                            ctx.Skill.Remove(this.skill);
+                        }
 					}
 					
 					

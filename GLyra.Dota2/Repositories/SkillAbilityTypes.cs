@@ -12,16 +12,13 @@ namespace GLyra.Dota2.Repositories
     using System;
     using System.Collections.Generic;
     
-    public partial class AbilityType
+    public partial class SkillAbilityTypes
     {
-        public AbilityType()
-        {
-            this.SkillAbilityTypes = new HashSet<SkillAbilityTypes>();
-        }
-    
         public int ID { get; set; }
-        public string Name { get; set; }
+        public int SkillId { get; set; }
+        public int AbilityTypeId { get; set; }
     
-        public virtual ICollection<SkillAbilityTypes> SkillAbilityTypes { get; set; }
+        public virtual AbilityType AbilityType { get; set; }
+        public virtual Skill Skill { get; set; }
     }
 }

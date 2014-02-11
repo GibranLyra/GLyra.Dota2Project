@@ -75,23 +75,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgilityPackHelper.cs" />
-    <Compile Include="BaseRepositoryApi.cs" />
-    <Compile Include="Converters\AttributesCreator.cs" />
-    <Compile Include="Converters\HeroCreator.cs" />
-    <Compile Include="Converters\SkillAbilityTypeCreator.cs" />
-    <Compile Include="Converters\SkillCreator.cs" />
-    <Compile Include="List.cs" />
-    <Compile Include="LogHandler.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Converters\HeroDataConverter.cs" />
     <Compile Include="Repositories\AbilityType.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="AgilityPackHelper.cs" />
     <Compile Include="Repositories\Attributes.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BaseRepositoryApi.cs" />
+    <Compile Include="Converters\AttributesCreator.cs" />
+    <Compile Include="Converters\HeroCreator.cs" />
+    <Compile Include="Converters\SkillCreator.cs" />
     <Compile Include="Repositories\DamageType.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
@@ -116,6 +110,11 @@
     <Compile Include="Repositories\HeroPortraits.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="List.cs" />
+    <Compile Include="LogHandler.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Converters\HeroDataConverter.cs" />
     <Compile Include="Repositories\Skill.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
@@ -131,7 +130,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <EntityDeploy Include="Repositories\Dota2DataModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Dota2DataModel.Designer.cs</LastGenOutput>
@@ -149,6 +147,7 @@
       <DependentUpon>Dota2DataModel.edmx</DependentUpon>
       <LastGenOutput>Dota2DataModel.cs</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

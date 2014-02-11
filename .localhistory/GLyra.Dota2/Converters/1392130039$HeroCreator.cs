@@ -40,8 +40,8 @@ namespace GLyra.Dota2.Converters
         public void createHeroSkill(string name, string description, List<KeyValuePair<string, string>> manaCostList, List<KeyValuePair<string, string>> coolDownList,
             List<KeyValuePair<string, string>> abilityCastTypeList, List<KeyValuePair<string, string>> targetAffectedTypeList, List<KeyValuePair<string, string>> damageTypeList, string videoUrl)
         {
-            SkillCreator sCreator = new SkillCreator();
-            sCreator.createSkill(this.hero.ID, name, description, manaCostList, coolDownList, abilityCastTypeList, targetAffectedTypeList, damageTypeList, videoUrl);
+            //SkillCreator sCreator = new SkillCreator();
+            //sCreator.createSkill(this.hero.ID, name, description, manaCostList, coolDownList, abilityCastTypeList, targetAffectedTypeList, damageTypeList, videoUrl);
         }
 
         public void createHeroPrimaryStats(Dictionary<string, string> primaryStats)

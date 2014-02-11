@@ -31,6 +31,7 @@ namespace GLyra.Dota2.Repositories
         public virtual DbSet<Hero> Hero { get; set; }
         public virtual DbSet<HeroPortraits> HeroPortraits { get; set; }
         public virtual DbSet<Skill> Skill { get; set; }
+        public virtual DbSet<SkillAbilityTypes> SkillAbilityTypes { get; set; }
         public virtual DbSet<SkillImage> SkillImage { get; set; }
         public virtual DbSet<TargetAffectedType> TargetAffectedType { get; set; }
     }

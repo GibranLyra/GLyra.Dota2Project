@@ -68,7 +68,7 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="SkillId" Type="int" Nullable="false" />
     <Property Name="AbilityTypeId" Type="int" Nullable="false" />
   </EntityType>

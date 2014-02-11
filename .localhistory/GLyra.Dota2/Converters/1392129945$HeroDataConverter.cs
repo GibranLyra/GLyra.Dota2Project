@@ -76,8 +76,8 @@ namespace Dota.CentralDota.Repositories
 
         private HtmlDocument LoadHeroHtmlPage(string heroName)
         {
-            HtmlDocument doc = new HtmlDocument();            
-            string pageUrl = "http://www.dota2.com/hero/" + heroName.Replace(" ", "_") + "/?l=english";
+            HtmlDocument doc = new HtmlDocument();
+            string pageUrl = "http://www.dota2.com/hero/" + heroName + "/?l=english";
             doc.Load(GetStream(pageUrl));
             Console.WriteLine("accessing: " + pageUrl);
             return doc;

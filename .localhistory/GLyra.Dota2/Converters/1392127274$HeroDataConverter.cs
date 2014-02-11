@@ -42,7 +42,7 @@ namespace Dota.CentralDota.Repositories
 
             foreach (var heroName in heroesName)
             {
-                doc = LoadHeroHtmlPage(heroName);                
+                doc = LoadHeroHtmlPage(heroName);
 
                 skillImages = GetSkillPortraits(doc);
                 skillNames = GetSkillNames(doc);
@@ -58,28 +58,23 @@ namespace Dota.CentralDota.Repositories
                 skillVideo = GetSkillVideo(doc);
                 skillRemainingValues = GetSkillRemainingValues(doc);
 
-                Console.WriteLine("Getting info from Dota2 page Completed");
                 heroCreator.createHero(heroName, biography);
-                Console.WriteLine("Hero Created");
+
                 for (int i = 0; i < skillNames.Count; i++)
                 {
                     heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType,
                         skillTargetAffectedType, skillDamageType, skillVideo);
-                    Console.WriteLine("Skill " + skillNames[i] + " Created");
                 }
 
                 heroCreator.createHeroPrimaryStats(primaryStatsValues);
-                Console.WriteLine("Primary Stats Created ");
-
             }
         }
 
         private HtmlDocument LoadHeroHtmlPage(string heroName)
         {
-            HtmlDocument doc = new HtmlDocument();            
-            string pageUrl = "http://www.dota2.com/hero/" + heroName.Replace(" ", "_") + "/?l=english";
-            doc.Load(GetStream(pageUrl));
-            Console.WriteLine("accessing: " + pageUrl);
+            HtmlDocument doc = new HtmlDocument();
+            doc.Load(GetStream("http://www.dota2.com/hero/" + heroName + "/?l=english"));            
+
             return doc;
         }
 
@@ -278,45 +273,37 @@ namespace Dota.CentralDota.Repositories
             foreach (var remainingValue in abilityFooterBoxRight)
             {
                 var divInnerHtml = remainingValue.SelectNodes(".//*[contains(@span, '')]");
-                if (divInnerHtml != null)
+
+                var descriptionList = divInnerHtml.Where(x => x.Name == "br").ToList();                
+                var valuesList = divInnerHtml.Where(x => x.Name == "span").ToList();
+
+                var skillDescriptionList = new List<string>();//Onde ficam as descrições do que a skill faz
+                var skillValuesList = new List<string>(); //Onde ficam os valores do que a skill faz
+
+                for (int i = 0; i < descriptionList.Count; i++)
                 {
-                    var descriptionList = divInnerHtml.Where(x => x.Name == "br").ToList();
-                    var valuesList = divInnerHtml.Where(x => x.Name == "span")
-                                                 .Where(x => x.Attributes["class"].Value != "scepterVal");
+                    //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
+                    if(i == 0)
+                        skillDescriptionList.Add(descriptionList[i].PreviousSibling.PreviousSibling.InnerText.Trim());
 
-
-                    var skillDescriptionList = new List<string>();//Onde ficam as descrições do que a skill faz
-                    var skillValuesList = new List<string>(); //Onde ficam os valores do que a skill faz
-
-                    for (int i = 0; i < descriptionList.Count; i++)
+                    //When the value is "" the skill must be a scepter upgrade, so we need to check the scepterVal class
+                    if (descriptionList[i].NextSibling.InnerText.Trim() == "")
                     {
-                        //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
-                        if (i == 0)
-                            skillDescriptionList.Add(descriptionList[i].PreviousSibling.PreviousSibling.InnerText.Trim());
-
-                        if (descriptionList.Count > 1)
-                        {
-                            //When the value is "" the skill must be a scepter upgrade, so we need to check the scepterVal class
-                            if (descriptionList[i].NextSibling.InnerText.Trim() == "")
-                            {
-                                skillDescriptionList.Add(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
-                                divInnerHtml.Remove(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
-                            }
-                            else
-                                skillDescriptionList.Add(descriptionList[i].NextSibling.InnerText.Trim());
-                        }
-
+                        skillDescriptionList.Add(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
+                        divInnerHtml.Remove(descriptionList[i].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
                     }
-
-                    foreach (var span in valuesList)
-                    {
-                        skillValuesList.Add(span.InnerText.Trim());
-                    }
-
-
-                    remainingValues.Add(skillDescriptionList);
-                    remainingValues.Add(skillValuesList);
+                    else
+                        skillDescriptionList.Add(descriptionList[i].NextSibling.InnerText.Trim());
                 }
+
+                foreach (var span in valuesList)
+                {
+                    skillValuesList.Add(span.InnerText.Trim());
+                }
+
+
+                remainingValues.Add(skillDescriptionList);
+                remainingValues.Add(skillValuesList);
             }
 
             return remainingValues;

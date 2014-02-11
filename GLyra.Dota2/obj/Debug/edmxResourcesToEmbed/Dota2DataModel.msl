@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="Dota2ModelStoreContainer" CdmEntityContainer="Dota2Entities">
+  <EntityContainerMapping StorageEntityContainer="Dota2ModelStoreContainer" CdmEntityContainer="Dota2Entities1">
     <EntitySetMapping Name="AbilityType">
       <EntityTypeMapping TypeName="Dota2Model.AbilityType">
         <MappingFragment StoreEntitySet="AbilityType">
