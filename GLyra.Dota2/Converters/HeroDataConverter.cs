@@ -3,6 +3,7 @@ using GLyra.Dota2.Repositories;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,13 +21,13 @@ namespace Dota.CentralDota.Repositories
         List<string> skillNames = new List<string>();
         List<string> skillDescriptions = new List<string>();
         List<string> primaryStatsImages = new List<string>();
-        List<string> primaryStatsValues = new List<string>();
+        Dictionary<string,string> primaryStatsValues = new Dictionary<string,string>();
         string biography;
         List<KeyValuePair<string, string>> manaCostDictionary = new List<KeyValuePair<string, string>>();
-        List<string> coolDownList = new List<string>();
-        List<string> abilityCastType = new List<string>();
-        List<string> skillTargetAffectedType = new List<string>();
-        List<string> skillDamageType = new List<string>();
+        List<KeyValuePair<string, string>> coolDownList = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> abilityCastType = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> skillTargetAffectedType = new List<KeyValuePair<string, string>>();
+        List<KeyValuePair<string, string>> skillDamageType = new List<KeyValuePair<string, string>>();
         string skillVideo;
         List<List<string>> skillRemainingValues = new List<List<string>>();
         HeroCreator heroCreator = new HeroCreator();
@@ -57,13 +58,15 @@ namespace Dota.CentralDota.Repositories
                 skillVideo = GetSkillVideo(doc);
                 skillRemainingValues = GetSkillRemainingValues(doc);
 
-                heroCreator.createHero(heroName, biography);                
+                heroCreator.createHero(heroName, biography);
 
                 for (int i = 0; i < skillNames.Count; i++)
                 {
-                    heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType[i],
-                        skillTargetAffectedType[i], skillDamageType[i], skillVideo);
+                    heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType,
+                        skillTargetAffectedType, skillDamageType, skillVideo);
                 }
+
+                heroCreator.createHeroPrimaryStats(primaryStatsValues);
             }
         }
 
@@ -163,9 +166,9 @@ namespace Dota.CentralDota.Repositories
             return skillDescriptionsList;
         }
 
-        List<string> GetAbilityCastType(HtmlDocument doc)
+        List<KeyValuePair<string, string>> GetAbilityCastType(HtmlDocument doc)
         {
-            var AbilityCastTypeList = new List<string>();
+            var AbilityCastTypeList = new List<KeyValuePair<string, string>>();
 
             var skillList = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
 
@@ -173,58 +176,92 @@ namespace Dota.CentralDota.Repositories
             //Pega o valor do primeiro span(que é o que contém a informação do comportamento da skill
             foreach (var skillType in skillList)
             {
+                //Get the name of the skill that the mana belongs
+                string skillName = getSkillNameInSkillData(skillType);
+
                 var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
-                AbilityCastTypeList.Add(spanList.First().InnerText.Trim());
+                var abilityCastTypeKeyValue = new KeyValuePair<string, string>(skillName, spanList.First().InnerText.Trim());
+                AbilityCastTypeList.Add(abilityCastTypeKeyValue);
             }
 
             return AbilityCastTypeList;
         }
 
-        List<string> GetSkillTargetAffectedType(HtmlDocument doc)
+        List<KeyValuePair<string, string>> GetSkillTargetAffectedType(HtmlDocument doc)
         {
-            var skillTargetAffectedTypeList = new List<string>();
+            var skillTargetAffectedTypeList = new List<KeyValuePair<string, string>>();
 
             var abilityFooterBoxLeft = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
 
-            //Pega o valor do ultimo span(que é o que contém a informação do tipo de dano da skill)
+            //Get the last span node(the one that have the info of type "damage type"
             foreach (var skillType in abilityFooterBoxLeft)
             {
+                string skillName = getSkillNameInSkillData(skillType);
+
                 var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
-                //Algumas skills não tem dano
+
+                //Some skills don't have damage
                 if (spanList.Count > 1)
+                {
+                    KeyValuePair<string, string> skillTargetAffectedKeyValue;
                     if (spanList.Count == 3)
-                        skillTargetAffectedTypeList.Add(spanList.ElementAt(1).InnerText);
-                    //Verifica se o valro é damage, se nao for o valor é "Affects"
+                    {
+                        skillTargetAffectedKeyValue = new KeyValuePair<string, string>(skillName, spanList.ElementAt(1).InnerText);
+                    }
+                    //Checks if the value is damage. If it isn't, then the value is "Affects"
                     else if (spanList.Last().PreviousSibling.InnerText.Contains("AFFECTS"))
-                        skillTargetAffectedTypeList.Add(spanList.Last().InnerText);
-                    
+                    {
+                        skillTargetAffectedKeyValue = new KeyValuePair<string, string>(skillName, spanList.Last().InnerText);
+                    }
                     else
-                        skillTargetAffectedTypeList.Add(String.Empty);
+                    {
+                        skillTargetAffectedKeyValue = new KeyValuePair<string, string>(string.Empty, string.Empty);
+                        skillTargetAffectedTypeList.Add(skillTargetAffectedKeyValue);
+                    }
+                    skillTargetAffectedTypeList.Add(skillTargetAffectedKeyValue);
+                }      
             }
 
             return skillTargetAffectedTypeList;
         }
 
-        List<string> GetSkillDamageType(HtmlDocument doc)
+        List<KeyValuePair<string, string>> GetSkillDamageType(HtmlDocument doc)
         {
-            var damageType = new List<string>();
+            var damageTypeList = new List<KeyValuePair<string, string>>();
 
             var abilityFooterBoxLeft = doc.DocumentNode.SelectNodes("//*[@class = 'abilityFooterBoxLeft']");
 
-            //Pega o valor do ultimo span(que é o que contém a informação do tipo de dano da skill)
-            foreach (var skillType in abilityFooterBoxLeft)
+            //Get the last span Value(the one that contains the info of damage Type)
+            foreach (var damageType in abilityFooterBoxLeft)
             {
-                var spanList = skillType.SelectNodes(".//*[@class = 'attribVal']");
-                //Algumas skills não tem dano
+                string skillName = getSkillNameInSkillData(damageType);
+
+                var spanList = damageType.SelectNodes(".//*[@class = 'attribVal']");
+
+                KeyValuePair<string, string> damageTypeKeyValue;
+                //Some skills don't have damage
                 if (spanList.Count > 1)
-                    //Verifica se o valro é damage, se nao for o valor é "Affects"
-                    if(spanList.Last().PreviousSibling.InnerText.Contains("DAMAGE") || spanList.Count == 3)
-                        damageType.Add(spanList.Last().InnerText);
+                {
+                    //Check if the value is "Damage", if it's not, the value is "Affects"
+                    if (spanList.Last().PreviousSibling.InnerText.Contains("DAMAGE") || spanList.Count == 3)
+                    {
+                        damageTypeKeyValue = new KeyValuePair<string, string>(skillName, spanList.Last().InnerText);
+
+                    }
+                    else
+                    {
+                        damageTypeKeyValue = new KeyValuePair<string, string>(String.Empty, String.Empty);                        
+                    }
+                }
                 else
-                    damageType.Add(String.Empty);
+                {
+                    damageTypeKeyValue = new KeyValuePair<string, string>(String.Empty, String.Empty);
+                }
+
+                damageTypeList.Add(damageTypeKeyValue);
             }
 
-            return damageType;
+            return damageTypeList;
         }
 
         List<List<string>> GetSkillRemainingValues(HtmlDocument doc)
@@ -235,11 +272,7 @@ namespace Dota.CentralDota.Repositories
 
             foreach (var remainingValue in abilityFooterBoxRight)
             {
-                //TODO Terminar está função
-
                 var divInnerHtml = remainingValue.SelectNodes(".//*[contains(@span, '')]");
-
-
 
                 var brList = divInnerHtml.Where(x => x.Name == "br").ToList();                
                 var spanList = divInnerHtml.Where(x => x.Name == "span").ToList();
@@ -306,17 +339,30 @@ namespace Dota.CentralDota.Repositories
             return primaryStatsImgUrlsList;
         }
 
-        List<string> GetPrimaryStatsValues(HtmlDocument doc)
+        Dictionary<string, string> GetPrimaryStatsValues(HtmlDocument doc)
         {
             int expectedSize = 6;
-            var primaryStatsList = new List<string>();
+            var primaryStatsList = new Dictionary<string, string>();
 
             var overviewStatVal = doc.DocumentNode.SelectNodes("//*[@class = 'overview_StatVal']");
+            var skillName = doc.DocumentNode.SelectNodes("//*[@class = 'overview_StatVal']");
 
-            foreach (var primaryStat in overviewStatVal)
+            for (int i = 0; i < overviewStatVal.Count; i++)
             {
-                //Get PrimaryStat
-                primaryStatsList.Add(primaryStat.InnerText);
+                //? GetThe name of primary Stat according to the position in the array
+                //0 for intelligence, 1 for agility, 2 for strength
+                //3 for Damage, 4 for MoveSpeed and 5 for Armor
+                //string statName = overviewStatVal[i]
+                string statsName = overviewStatVal[i].PreviousSibling.PreviousSibling.GetAttributeValue("title", string.Empty);
+
+                //TODO implements log
+                //Checks if the value is empty, if is empty writes a log
+                if(statsName == string.Empty)
+                    throw new Exception();
+
+                string statValue = overviewStatVal[i].InnerText;
+
+                primaryStatsList.Add(statsName, statValue);
             }
 
             if (primaryStatsList.Count() > expectedSize)
@@ -337,13 +383,14 @@ namespace Dota.CentralDota.Repositories
 
         List<KeyValuePair<string, string>> GetManaCost(HtmlDocument doc)
         {
-            var manaCostDictionary = new List<KeyValuePair<string, string>>();            
+            var manaCostDictionary = new List<KeyValuePair<string, string>>();     
+       
             var mana = doc.DocumentNode.SelectNodes("//*[@class = 'mana']");
-
-            //Get the name of the skill
-            string skillName = mana.First().ParentNode.ParentNode.ParentNode.Descendants("h2").First().InnerText;
+            
             foreach (var manaCost in mana)
             {
+                //Get the name of the skill that the mana belongs
+                string skillName = getSkillNameInSkillData(manaCost);
                 //Search for the span in the node
                 var spanManaCost = manaCost.Descendants("span");
                 //Remove the span that contains the text "Mana Cost: "
@@ -354,23 +401,38 @@ namespace Dota.CentralDota.Repositories
             return manaCostDictionary;
         }
 
-        List<string> GetCoolDown(HtmlDocument doc)
+        List<KeyValuePair<string, string>> GetCoolDown(HtmlDocument doc)
         {
-            var coolDownList = new List<string>();
+            var coolDownList = new List<KeyValuePair<string, string>>();
 
             var cooldown = doc.DocumentNode.SelectNodes("//*[@class = 'cooldown']");
 
             foreach (var cooldownTime in cooldown)
             {
+                //Get the name of the skill that the mana belongs
+                string skillName = getSkillNameInSkillData(cooldownTime);
                 //Search for the span in the node
                 var spanCoolDownTime = cooldownTime.Descendants("span");
                 //Remove the span that contains the text "Cooldown: "
                 cooldownTime.RemoveChild(spanCoolDownTime.First());
 
-                coolDownList.Add(cooldownTime.InnerText);
+                var coolDownKeyValue = new KeyValuePair<string, string>(skillName, cooldownTime.InnerText);
+                coolDownList.Add(coolDownKeyValue);
+
+                //coolDownList.Add(cooldownTime.InnerText);
             }
 
             return coolDownList;
+        }
+
+        /// <summary>
+        /// Returns the name of the skill in the context of the function
+        /// Functions that need the information are:
+        /// CoolDOwn, Mana, abilityCast, abilityTarget and DamageType
+        /// </summary>
+        string getSkillNameInSkillData(HtmlNode currentNode)
+        {
+            return currentNode.ParentNode.ParentNode.ParentNode.Descendants("h2").First().InnerText;
         }
 
         protected Stream GetStream(string url)

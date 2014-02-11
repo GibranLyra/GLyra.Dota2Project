@@ -11,8 +11,8 @@ namespace GLyra.Dota2.Converters
     {
         Skill skill;
 
-        public Skill createSkill(int heroId, string name, string description, List<KeyValuePair<string, string>> manaCostList, List<string> coolDownList,
-            string abilityCastType, string targetAffectedType, string damageType, string videoUrl)
+        public Skill createSkill(int heroId, string name, string description, List<KeyValuePair<string, string>> manaCostList, List<KeyValuePair<string, string>> coolDownList,
+            List<KeyValuePair<string, string>> abilityCastTypeList, List<KeyValuePair<string, string>> targetAffectedTypeList, List<KeyValuePair<string, string>> damageTypeList, string videoUrl)
         {
             this.skill = new Skill();
 
@@ -20,39 +20,72 @@ namespace GLyra.Dota2.Converters
             this.skill.Name = name;
             this.skill.Description = description;
             this.skill.VideoUrl = videoUrl;
+
             //Set Up ManaCost
             foreach (var manaCost in manaCostList)
             {
-                setManaCost(manaCost.Value);
+                //Check if the mana cost is for the current skill
+                //We need to check this because certain skills don't need mana
+                if (manaCost.Key == this.skill.Name)
+                {
+                    setManaCost(manaCost.Value);
+                }
             }
 
             //Set up CoolDowns
             foreach (var coolDown in coolDownList)
             {
-                setCoolDowns(coolDown);
+                //Check if the coolDown is for the current skill
+                //We need to check this because certain skills don't have coolDown
+                if (coolDown.Key == this.skill.Name)
+                    setCoolDowns(coolDown.Value);
             }
 
-            if(!string.IsNullOrEmpty(abilityCastType))
-                setAbilityCastType(abilityCastType);
+            foreach (var abilityCastType in abilityCastTypeList)
+            {
+                //Check if the AbilityCastType is for the current skill
+                //We need to check this because certain skills don't have AbilityCastType
+                if (abilityCastType.Key == this.skill.Name)
+                {
+                    if (!string.IsNullOrEmpty(abilityCastType.Value))
+                        setAbilityCastType(abilityCastType.Value);
+                }
+            }
 
-            if (!string.IsNullOrEmpty(targetAffectedType))
-                setTargetAffectedType(targetAffectedType);
+            foreach (var targetAffectedType in targetAffectedTypeList)
+            {
+                //Check if the targetAffectedType is for the current skill
+                //We need to check this because certain skills don't have targetAffectedType
+                if (!string.IsNullOrEmpty(targetAffectedType.Value))
+                    setTargetAffectedType(targetAffectedType.Value);
+            }
 
-            if (!string.IsNullOrEmpty(damageType))
-                setDamageType(damageType);
+            foreach (var damageType in damageTypeList)
+            {
+                //Check if the damageType is for the current skill
+                //We need to check this because certain skills don't have damageType
+                if (!string.IsNullOrEmpty(damageType.Value))
+                    setDamageType(damageType.Value);
+            }
+
+            insertSkill();
 
             return this.skill;
-
         }
 
         void setManaCost(string manaCostString)
         {
             string[] manaCosts = manaCostString.Split('/');
+            int size = manaCosts.Count();
 
-            this.skill.ManaCostLv1 = int.Parse(manaCosts.First());
-            this.skill.ManaCostLv2 = int.Parse(manaCosts.ElementAt(1));
-            this.skill.ManaCostLv3 = int.Parse(manaCosts.ElementAt(2));
-            this.skill.ManaCostLv4 = int.Parse(manaCosts.ElementAt(3));
+            if (size > 0)
+                this.skill.ManaCostLv1 = int.Parse(manaCosts.First());
+            if (size > 1)
+                this.skill.ManaCostLv2 = int.Parse(manaCosts.ElementAt(1));
+            if (size > 2)
+                this.skill.ManaCostLv3 = int.Parse(manaCosts.ElementAt(2));
+            if (size > 3)
+                this.skill.ManaCostLv4 = int.Parse(manaCosts.ElementAt(3));
         }
 
         void setCoolDowns(string coolDownString)
@@ -84,7 +117,6 @@ namespace GLyra.Dota2.Converters
 
             if (abilityType != null)
             {
-                this.skill.AbilityType = abilityType;
                 this.skill.AbilityTypeId = abilityType.ID;
             }
             else
@@ -108,7 +140,6 @@ namespace GLyra.Dota2.Converters
 
             if (targetAffectedType != null)
             {
-                this.skill.TargetAffectedType = targetAffectedType;
                 this.skill.TargetAffectedTypeId = targetAffectedType.ID;
             }
             else
@@ -132,7 +163,6 @@ namespace GLyra.Dota2.Converters
 
             if (damageType != null)
             {
-                this.skill.DamageType = damageType;
                 this.skill.DamageTypeId = damageType.ID;
             }
             else
@@ -140,6 +170,26 @@ namespace GLyra.Dota2.Converters
                 //TODO Incluir este erro no log posteriormente
                 throw new Exception("No DamageType has been returned. DamageType: " + damageTypeString);
             }
+        }
+
+        Skill insertSkill()
+        {
+            using (Dota2Entities ctx = new Dota2Entities())
+            {
+                try
+                {
+                    ctx.Skill.Add(this.skill);
+
+                    ctx.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    //TODO Adicionar ao log
+                    throw e;
+                }
+            }
+
+            return this.skill;
         }
     }
 }

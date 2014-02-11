@@ -34,7 +34,6 @@ C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.D
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\System.Net.Http.Primitives.xml
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.exe
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.pdb
-C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\EntityFramework.dll
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\EntityFramework.xml
 D:\PersonalProjects\GLyra.Dota2\bin\Debug\GLyra.Dota2.exe.config
 D:\PersonalProjects\GLyra.Dota2\obj\Debug\GLyra.Dota2.exe
@@ -58,3 +57,6 @@ D:\PersonalProjects\GLyra.Dota2\bin\Debug\EntityFramework.dll
 D:\PersonalProjects\GLyra.Dota2\bin\Debug\EntityFramework.SqlServer.dll
 D:\PersonalProjects\GLyra.Dota2\bin\Debug\EntityFramework.xml
 D:\PersonalProjects\GLyra.Dota2\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\EntityFramework.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\EntityFramework.SqlServer.xml

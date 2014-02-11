@@ -11,18 +11,33 @@ namespace GLyra.Dota2.Converters
     {
         Attributes attribute;
 
-        public AttributesCreator(int heroId, List<string> primaryStats)
+        public AttributesCreator(int heroId, Dictionary<string, string> primaryStats)
         {
+
+
             attribute = new Attributes();
             attribute.HeroId = heroId;
+            attribute.Intelligence = primaryStats["Intelligence"];
+            attribute.Agility = primaryStats["Agility"];
+            attribute.Strength = primaryStats["Strength"];
+            attribute.Damage = primaryStats["Damage"];
+            attribute.MoveSpeed = primaryStats["Movespeed"];
+            attribute.Armor = primaryStats["Armor"];
 
+            using (Dota2Entities ctx = new Dota2Entities())
+            {
+                try
+                {
+                    ctx.Attributes.Add(this.attribute);
 
-            //attribute.Agility = agility;
-            //attribute.Intelligence = intelligence;
-            //attribute.Strength = strength;
-            //attribute.Damage = damage;
-            //attribute.MoveSpeed = moveSpeed;
-            //attribute.Armor = armor;
+                    ctx.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    //TODO Adicionar ao log
+                    throw e;
+                }
+            }
         }
     }
 }
