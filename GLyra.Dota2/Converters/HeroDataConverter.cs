@@ -81,7 +81,7 @@ namespace Dota.CentralDota.Repositories
 
                 Console.WriteLine("Getting info from Dota2 page Completed");
                 heroCreator.createHero(heroName, biography);
-                Console.WriteLine(heroName + " Created(Hero)");
+                Console.WriteLine("******************************** " + heroName + " Created(Hero)" + "********************************");
                 for (int i = 0; i < skillNames.Count; i++)
                 {
                     heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType,
@@ -97,8 +97,11 @@ namespace Dota.CentralDota.Repositories
 
         private HtmlDocument LoadHeroHtmlPage(string heroName)
         {
-            HtmlDocument doc = new HtmlDocument();            
-            string pageUrl = "http://www.dota2.com/hero/" + heroName.Replace(" ", "_") + "/?l=english";
+            HtmlDocument doc = new HtmlDocument();
+            string heroUrlName = heroName.Replace("'", "");
+            heroUrlName = heroUrlName.Replace(" ", "_");
+            
+            string pageUrl = "http://www.dota2.com/hero/" + heroUrlName + "/?l=english";
             doc.Load(GetStream(pageUrl));
             Console.WriteLine("accessing: " + pageUrl);
             return doc;
@@ -294,8 +297,7 @@ namespace Dota.CentralDota.Repositories
         {
             var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
 
-            var skillNameList = new List<string>();//Where the skillNames are
-            
+            var skillNameList = new List<string>();//Where the skillNames are            
 
             //We need to take this nodelist to get the skillName of the remaining values
             var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
@@ -310,23 +312,30 @@ namespace Dota.CentralDota.Repositories
 
                 var divInnerHtml = abilityFooterBoxRight[i].SelectNodes(".//*[contains(@span, '')]");
 
+                //Íf the divInnerHtml is empty, it means that the abilityFooterBoxRight don't have info about the skill
+                //but the abilityHeaderRowDescription may have info, so we must check it
                 if (divInnerHtml != null)
                 {
+                    //? Get the list of br tags that contains the description
                     var descriptionList = divInnerHtml.Where(x => x.Name == "br").ToList();
 
+                    //? Get the list of span tags that contains the values
                     var valuesList = divInnerHtml.Where(x => x.Name == "span")
                                                  .Where(x => x.Attributes["class"].Value != "scepterVal");
 
-                    //Get the name of the skills that the current remanining values are
-                    skillNameList.Add(abilityHeaderRowDescription[i].ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim());
-
+                    //? Get the name of the skills that the current remanining values are
+                    string skillName = getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]);
+                    //Now a workaround, Because dictionaries doesn't accept keys with same value, we need to add a " " 
+                    //to skills that have the same name.
+                    if(skillNameList.Contains(skillName))
+                        skillNameList.Add(workAroundToSkillsOfSameName(skillName));
+                    else
+                        skillNameList.Add(skillName);
                     //In case that no tag "br" exists, it means that the skill has only one description
                     //So we need to get the value inside the div tag
                     if (descriptionList.Count <= 0)
                     {
                         HtmlNode htmlNode = abilityFooterBoxRight[i].ChildNodes.Where(x => x.Name == "#text").First();
-
-                        
                         skillDescriptionList.Add(htmlNode.InnerText.Trim());
                     }
 
@@ -361,13 +370,44 @@ namespace Dota.CentralDota.Repositories
 
                     for (int ix = 0; ix < skillDescriptionList.Count; ix++)
                     {
+                        //Now a workaround, Because dictionaries doesn't accept keys with same value, we need to add a " " 
+                        //to skillDescriptionList that have the same name.
+                        //if (dicDescValue[skillName].Contains(skillDescriptionList[ix]))
+                        //{
+                        //    skillDescriptionList[ix] = workAroundToSkillsSameDescription(skillDescriptionList[ix]);
+                        //}
+                        //else
+
+
+                        if (skillDescriptionList.Count != skillDescriptionList.Distinct().Count())
+                        {
+                            var duplicates = skillDescriptionList.GroupBy(s => s).SelectMany(grp => grp.Skip(1));
+
+
+                            //TODO Comentar isto
+                            foreach (var duplicate in duplicates)
+                            {
+                                for (int it = 0; it < skillDescriptionList.Count; it++)
+                                {
+                                    if (skillDescriptionList[it].Contains(duplicate))
+                                    {
+                                        skillDescriptionList[it] = skillDescriptionList[it] + " ";
+                                    }
+                                }    
+                            }
+                            
+                        }
+
                         dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
-                    }
-                    
+                    }                    
+
                     dicRemainingValues.Add(skillNameList[i], dicDescValue);
                 }
-                //remainingValues.Add(skillDescriptionList);
-                //remainingValues.Add(skillValuesList);
+                //In this case, the skill don't have values or descriptions, so we only need to get their name
+                else if (abilityHeaderRowDescription != null)
+                {
+                    skillNameList.Add(getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]));
+                }
             }
 
             //Fill the dictionary with data
@@ -379,6 +419,25 @@ namespace Dota.CentralDota.Repositories
 	        }
             
             return dicRemainingValues;
+        }
+
+        private string workAroundToSkillsOfSameName(string skillName)
+        {
+            return skillName + " ";
+        }
+
+        private string workAroundToSkillsSameDescription(string skillDescription)
+        {
+            return skillDescription + " ";
+        }
+
+        /// <summary>
+        /// Returns the name of the skill when the node is inside the abilityHeaderRowDescription class
+        /// </summary>
+        private string getSkillNameInRemainingSkill(HtmlNode abilityHeaderRowDescriptionClassNode)
+        {
+            string skillName = abilityHeaderRowDescriptionClassNode.ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim();
+            return skillName;
         }
 
         string GetSkillVideo(HtmlDocument doc)
