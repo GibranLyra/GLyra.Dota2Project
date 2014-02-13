@@ -1,4 +1,4 @@
-﻿using GLyra.Dota2.Converters;
+﻿using GLyra.Dota2.ModelCreators;
 using GLyra.Dota2.Repositories;
 using HtmlAgilityPack;
 using System;
@@ -10,7 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dota.CentralDota.Repositories
+namespace Dota.CentralDota.Converters
 {
     class HeroDataConverter
     {
@@ -52,50 +52,72 @@ namespace Dota.CentralDota.Repositories
             skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
 
-            getDataFromHtml();
-        }
-
-        private void getDataFromHtml()
-        {
-            HtmlDocument doc = new HtmlDocument();
-
             heroesName = GetHeroesName();
 
             foreach (var heroName in heroesName)
             {
-                doc = LoadHeroHtmlPage(heroName);
-
-                skillImages = GetSkillPortraits(doc);
-                skillNames = GetSkillNames(doc);
-                skillDescriptions = GetSkillDescriptions(doc);
-                primaryStatsImages = GetPrimaryStatsImages(doc);
-                primaryStatsValues = GetPrimaryStatsValues(doc);
-                biography = GetBiography(doc).Trim();
-                manaCostDictionary = GetManaCost(doc);
-                coolDownList = GetCoolDown(doc);
-                abilityCastType = GetAbilityCastType(doc);
-                skillTargetAffectedType = GetSkillTargetAffectedType(doc);
-                skillDamageType = GetSkillDamageType(doc);
-                skillVideo = GetSkillVideo(doc);
-                skillRemainingValues = GetSkillRemainingValues(doc);
-
-                Console.WriteLine("Getting info from Dota2 page Completed");
-                heroCreator.createHero(heroName, biography);
-                Console.WriteLine("******************************** " + heroName + " Created(Hero)" + "********************************");
-                for (int i = 0; i < skillNames.Count; i++)
-                {
-                    heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType,
-                        skillTargetAffectedType, skillDamageType, skillVideo);
-                    Console.WriteLine("Skill " + skillNames[i] + " Created");
-                }
-
-                heroCreator.createHeroPrimaryStats(primaryStatsValues);
-                Console.WriteLine("Primary Stats Created ");
-
+                getDataFromHtml(heroName);                
+                createSkillEffectName();
+                //heroCreator.createHero(heroName, biography);
+                //createSkill();
+                //createPrimaryAttributes();
             }
         }
 
-        private HtmlDocument LoadHeroHtmlPage(string heroName)
+        protected void createSkillEffectName()
+        {
+            SkillEffectNameCreator effectNameCreator = new SkillEffectNameCreator();
+
+            foreach (var skill in skillRemainingValues)
+            {
+                foreach (var effectDic in skillRemainingValues[skill.Key])
+                {
+                    string effectName = effectDic.Key.Replace(":", string.Empty);
+                    effectNameCreator.checkIfSkillNameExists(effectName);
+                }
+            }
+        }
+
+        protected void getDataFromHtml(string heroName)
+        {
+            HtmlDocument doc = new HtmlDocument();
+
+            doc = LoadHeroHtmlPage(heroName);
+
+            skillImages = GetSkillPortraits(doc);
+            skillNames = GetSkillNames(doc);
+            skillDescriptions = GetSkillDescriptions(doc);
+            primaryStatsImages = GetPrimaryStatsImages(doc);
+            primaryStatsValues = GetPrimaryStatsValues(doc);
+            biography = GetBiography(doc).Trim();
+            manaCostDictionary = GetManaCost(doc);
+            coolDownList = GetCoolDown(doc);
+            abilityCastType = GetAbilityCastType(doc);
+            skillTargetAffectedType = GetSkillTargetAffectedType(doc);
+            skillDamageType = GetSkillDamageType(doc);
+            skillVideo = GetSkillVideo(doc);
+            skillRemainingValues = GetSkillRemainingValues(doc);
+
+            Console.WriteLine("Getting info from Dota2 page Completed");
+        }
+
+        protected void createSkill()
+        {
+            for (int i = 0; i < skillNames.Count; i++)
+            {
+                heroCreator.createHeroSkill(skillNames[i], skillDescriptions[i], manaCostDictionary, coolDownList, abilityCastType,
+                    skillTargetAffectedType, skillDamageType, skillVideo);
+                Console.WriteLine("Skill " + skillNames[i] + " Created");
+            }
+        }
+
+        protected void createPrimaryAttributes()
+        {
+            heroCreator.createHeroPrimaryStats(primaryStatsValues);
+            
+        }
+
+        protected HtmlDocument LoadHeroHtmlPage(string heroName)
         {
             HtmlDocument doc = new HtmlDocument();
             string heroUrlName = heroName.Replace("'", "");
@@ -107,7 +129,7 @@ namespace Dota.CentralDota.Repositories
             return doc;
         }
 
-        private HtmlDocument LoadHeroesPage()
+        protected HtmlDocument LoadHeroesPage()
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(GetStream("http://www.dota2.com/heroes/?l=english"));
@@ -421,12 +443,12 @@ namespace Dota.CentralDota.Repositories
             return dicRemainingValues;
         }
 
-        private string workAroundToSkillsOfSameName(string skillName)
+        protected string workAroundToSkillsOfSameName(string skillName)
         {
             return skillName + " ";
         }
 
-        private string workAroundToSkillsSameDescription(string skillDescription)
+        protected string workAroundToSkillsSameDescription(string skillDescription)
         {
             return skillDescription + " ";
         }
@@ -434,7 +456,7 @@ namespace Dota.CentralDota.Repositories
         /// <summary>
         /// Returns the name of the skill when the node is inside the abilityHeaderRowDescription class
         /// </summary>
-        private string getSkillNameInRemainingSkill(HtmlNode abilityHeaderRowDescriptionClassNode)
+        protected string getSkillNameInRemainingSkill(HtmlNode abilityHeaderRowDescriptionClassNode)
         {
             string skillName = abilityHeaderRowDescriptionClassNode.ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim();
             return skillName;

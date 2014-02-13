@@ -6,17 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GLyra.Dota2.Converters
+namespace GLyra.Dota2.ModelCreators
 {
     public class HeroCreator
     {
         Hero hero;
         
-        public Hero createHero(string name, string biography)
+        public Hero createHero(string heroName, string biography)
         {
             this.hero = new Hero();
 
-            this.hero.Name = name;
+            this.hero.Name = heroName;
             this.hero.Biography = biography;
 
             using (Dota2Entities ctx = new Dota2Entities())
@@ -26,6 +26,7 @@ namespace GLyra.Dota2.Converters
                     ctx.Hero.Add(this.hero);
 
                     ctx.SaveChanges();
+                    Console.WriteLine("*************************** " + heroName + " Created(Hero)" + "***************************");
                 }
                 catch (Exception e)
                 {

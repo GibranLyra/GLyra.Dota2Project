@@ -72,6 +72,19 @@
     <Property Name="SkillId" Type="int" Nullable="false" />
     <Property Name="AbilityTypeId" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="SkillEffectName">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SkillId" Type="int" Nullable="false" />
+    <Property Name="ValueLv1" Type="int" />
+    <Property Name="ValueLv2" Type="int" />
+    <Property Name="ValueLv3" Type="int" />
+    <Property Name="ValueLv4" Type="int" />
+    <Property Name="ValueScepter" Type="int" />
+  </EntityType>
   <EntityType Name="SkillImage">
     <Key>
       <PropertyRef Name="ID" />
@@ -171,6 +184,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SkillEffectName_0">
+    <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+    <End Role="SkillEffectName" Type="Self.SkillEffectName" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SkillEffectName">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SkillImage_0">
     <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
     <End Role="SkillImage" Type="Self.SkillImage" Multiplicity="*" />
@@ -191,6 +216,7 @@
     <EntitySet Name="HeroPortraits" EntityType="Self.HeroPortraits" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SkillAbilityTypes" EntityType="Self.SkillAbilityTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SkillEffectName" EntityType="Self.SkillEffectName" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SkillImage" EntityType="Self.SkillImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TargetAffectedType" EntityType="Self.TargetAffectedType" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Attributes_0" Association="Self.FK_Attributes_0">
@@ -220,6 +246,10 @@
     <AssociationSet Name="FK_SkillAbilityTypes_1" Association="Self.FK_SkillAbilityTypes_1">
       <End Role="AbilityType" EntitySet="AbilityType" />
       <End Role="SkillAbilityTypes" EntitySet="SkillAbilityTypes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SkillEffectName_0" Association="Self.FK_SkillEffectName_0">
+      <End Role="Skill" EntitySet="Skill" />
+      <End Role="SkillEffectName" EntitySet="SkillEffectName" />
     </AssociationSet>
     <AssociationSet Name="FK_SkillImage_0" Association="Self.FK_SkillImage_0">
       <End Role="Skill" EntitySet="Skill" />

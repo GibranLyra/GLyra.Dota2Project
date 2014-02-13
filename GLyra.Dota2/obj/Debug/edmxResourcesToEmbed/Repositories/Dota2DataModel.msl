@@ -80,6 +80,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SkillEffectName">
+      <EntityTypeMapping TypeName="Dota2Model.SkillEffectName">
+        <MappingFragment StoreEntitySet="SkillEffectName">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SkillId" ColumnName="SkillId" />
+          <ScalarProperty Name="ValueLv1" ColumnName="ValueLv1" />
+          <ScalarProperty Name="ValueLv2" ColumnName="ValueLv2" />
+          <ScalarProperty Name="ValueLv3" ColumnName="ValueLv3" />
+          <ScalarProperty Name="ValueLv4" ColumnName="ValueLv4" />
+          <ScalarProperty Name="ValueScepter" ColumnName="ValueScepter" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SkillImage">
       <EntityTypeMapping TypeName="Dota2Model.SkillImage">
         <MappingFragment StoreEntitySet="SkillImage">

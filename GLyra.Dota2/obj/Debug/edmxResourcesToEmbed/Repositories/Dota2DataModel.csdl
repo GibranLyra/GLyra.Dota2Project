@@ -74,17 +74,32 @@
     <NavigationProperty Name="Hero" Relationship="Self.FK_Skill_0" FromRole="Skill" ToRole="Hero" />
     <NavigationProperty Name="TargetAffectedType" Relationship="Self.FK_Skill_1" FromRole="Skill" ToRole="TargetAffectedType" />
     <NavigationProperty Name="SkillAbilityTypes" Relationship="Self.FK_SkillAbilityTypes_0" FromRole="Skill" ToRole="SkillAbilityTypes" />
+    <NavigationProperty Name="SkillEffectName" Relationship="Self.FK_SkillEffectName_0" FromRole="Skill" ToRole="SkillEffectName" />
     <NavigationProperty Name="SkillImage" Relationship="Self.FK_SkillImage_0" FromRole="Skill" ToRole="SkillImage" />
   </EntityType>
   <EntityType Name="SkillAbilityTypes">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="SkillId" Type="Int32" Nullable="false" />
     <Property Name="AbilityTypeId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="AbilityType" Relationship="Self.FK_SkillAbilityTypes_1" FromRole="SkillAbilityTypes" ToRole="AbilityType" />
     <NavigationProperty Name="Skill" Relationship="Self.FK_SkillAbilityTypes_0" FromRole="SkillAbilityTypes" ToRole="Skill" />
+  </EntityType>
+  <EntityType Name="SkillEffectName">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SkillId" Type="Int32" Nullable="false" />
+    <Property Name="ValueLv1" Type="Int32" />
+    <Property Name="ValueLv2" Type="Int32" />
+    <Property Name="ValueLv3" Type="Int32" />
+    <Property Name="ValueLv4" Type="Int32" />
+    <Property Name="ValueScepter" Type="Int32" />
+    <NavigationProperty Name="Skill" Relationship="Self.FK_SkillEffectName_0" FromRole="SkillEffectName" ToRole="Skill" />
   </EntityType>
   <EntityType Name="SkillImage">
     <Key>
@@ -187,6 +202,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SkillEffectName_0">
+    <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+    <End Role="SkillEffectName" Type="Self.SkillEffectName" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="SkillEffectName">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SkillImage_0">
     <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
     <End Role="SkillImage" Type="Self.SkillImage" Multiplicity="*" />
@@ -207,6 +234,7 @@
     <EntitySet Name="HeroPortraits" EntityType="Self.HeroPortraits" />
     <EntitySet Name="Skill" EntityType="Self.Skill" />
     <EntitySet Name="SkillAbilityTypes" EntityType="Self.SkillAbilityTypes" />
+    <EntitySet Name="SkillEffectName" EntityType="Self.SkillEffectName" />
     <EntitySet Name="SkillImage" EntityType="Self.SkillImage" />
     <EntitySet Name="TargetAffectedType" EntityType="Self.TargetAffectedType" />
     <AssociationSet Name="FK_SkillAbilityTypes_1" Association="Self.FK_SkillAbilityTypes_1">
@@ -236,6 +264,10 @@
     <AssociationSet Name="FK_SkillAbilityTypes_0" Association="Self.FK_SkillAbilityTypes_0">
       <End Role="Skill" EntitySet="Skill" />
       <End Role="SkillAbilityTypes" EntitySet="SkillAbilityTypes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SkillEffectName_0" Association="Self.FK_SkillEffectName_0">
+      <End Role="Skill" EntitySet="Skill" />
+      <End Role="SkillEffectName" EntitySet="SkillEffectName" />
     </AssociationSet>
     <AssociationSet Name="FK_SkillImage_0" Association="Self.FK_SkillImage_0">
       <End Role="Skill" EntitySet="Skill" />

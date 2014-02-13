@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GLyra.Dota2.Converters
+namespace GLyra.Dota2.ModelCreators
 {
     public class AttributesCreator
     {
@@ -13,8 +13,6 @@ namespace GLyra.Dota2.Converters
 
         public AttributesCreator(int heroId, Dictionary<string, string> primaryStats)
         {
-
-
             attribute = new Attributes();
             attribute.HeroId = heroId;
             attribute.Intelligence = primaryStats["Intelligence"];
@@ -31,6 +29,7 @@ namespace GLyra.Dota2.Converters
                     ctx.Attributes.Add(this.attribute);
 
                     ctx.SaveChanges();
+                    Console.WriteLine("Primary Stats Created ");
                 }
                 catch (Exception e)
                 {

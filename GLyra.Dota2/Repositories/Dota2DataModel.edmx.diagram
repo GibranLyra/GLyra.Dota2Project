@@ -4,16 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="debe173c35994842ad86a153cdb80ce5" Name="Diagram1">
-        <EntityTypeShape EntityType="Dota2Model.AbilityType" Width="1.5" PointX="6" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.Attributes" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.DamageType" Width="1.5" PointX="3.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.Hero" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.HeroPortraits" Width="1.5" PointX="3" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.Skill" Width="1.5" PointX="6" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.SkillAbilityTypes" Width="1.5" PointX="8.25" PointY="5.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.SkillImage" Width="1.5" PointX="8.25" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.TargetAffectedType" Width="1.5" PointX="3.75" PointY="11.25" IsExpanded="true" />
+      <Diagram DiagramId="c0fb096c9cdb492d870c87612af62813" Name="Diagram1">
+        <EntityTypeShape EntityType="Dota2Model.AbilityType" Width="1.5" PointX="6" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.Attributes" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.DamageType" Width="1.5" PointX="3.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.Hero" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.HeroPortraits" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.Skill" Width="1.5" PointX="6" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.SkillAbilityTypes" Width="1.5" PointX="8.25" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.SkillEffectName" Width="1.5" PointX="8.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.SkillImage" Width="1.5" PointX="8.25" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.TargetAffectedType" Width="1.5" PointX="3.75" PointY="12.875" IsExpanded="true" />
         <AssociationConnector Association="Dota2Model.FK_SkillAbilityTypes_1" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Attributes_0" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Skill_2" ManuallyRouted="false" />
@@ -21,6 +22,7 @@
         <AssociationConnector Association="Dota2Model.FK_Skill_0" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Skill_1" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_SkillAbilityTypes_0" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Model.FK_SkillEffectName_0" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_SkillImage_0" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

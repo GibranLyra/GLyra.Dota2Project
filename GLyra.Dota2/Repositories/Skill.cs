@@ -17,6 +17,7 @@ namespace GLyra.Dota2.Repositories
         public Skill()
         {
             this.SkillAbilityTypes = new HashSet<SkillAbilityTypes>();
+            this.SkillEffectName = new HashSet<SkillEffectName>();
             this.SkillImage = new HashSet<SkillImage>();
         }
     
@@ -40,6 +41,7 @@ namespace GLyra.Dota2.Repositories
         public virtual Hero Hero { get; set; }
         public virtual TargetAffectedType TargetAffectedType { get; set; }
         public virtual ICollection<SkillAbilityTypes> SkillAbilityTypes { get; set; }
+        public virtual ICollection<SkillEffectName> SkillEffectName { get; set; }
         public virtual ICollection<SkillImage> SkillImage { get; set; }
     }
 }

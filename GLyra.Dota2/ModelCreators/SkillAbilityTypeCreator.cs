@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GLyra.Dota2.Converters
+namespace GLyra.Dota2.ModelCreators
 {
     public class SkillAbilityTypesCreator
     {

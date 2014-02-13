@@ -1,5 +1,4 @@
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\GLyra.Dota2.exe.config
-C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.csprojResolveAssemblyReference.cache
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\GLyra.Dota2.exe
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\GLyra.Dota2.pdb
 C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\bin\Debug\HtmlAgilityPack.dll
@@ -62,3 +61,4 @@ D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\bin\Debug\System.Net.Http.Primitives
 D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\obj\Debug\GLyra.Dota2.csprojResolveAssemblyReference.cache
 D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\obj\Debug\GLyra.Dota2.exe
 D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\obj\Debug\GLyra.Dota2.pdb
+C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\obj\Debug\GLyra.Dota2.csprojResolveAssemblyReference.cache
