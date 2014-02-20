@@ -30,7 +30,7 @@ namespace Dota.CentralDota.Converters
         List<KeyValuePair<string, string>> skillTargetAffectedType;
         List<KeyValuePair<string, string>> skillDamageType;
         string skillVideo;
-        Dictionary<Skill, Dictionary<string, string>> skillRemainingValues;
+        Dictionary<string, Dictionary<string, string>> skillRemainingValues;
         HeroCreator heroCreator;
         SkillCreator skillCreator;
 
@@ -49,7 +49,7 @@ namespace Dota.CentralDota.Converters
             abilityCastType = new List<KeyValuePair<string, string>>();
             skillTargetAffectedType = new List<KeyValuePair<string, string>>();
             skillDamageType = new List<KeyValuePair<string, string>>();
-            skillRemainingValues = new Dictionary<Skill, Dictionary<string, string>>();
+            skillRemainingValues = new Dictionary<string, Dictionary<string, string>>();
             heroCreator = new HeroCreator();
             skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
@@ -70,14 +70,14 @@ namespace Dota.CentralDota.Converters
         {
             SkillEffectNameCreator effectNameCreator = new SkillEffectNameCreator();
 
-            foreach (var item in skillRemainingValues)
+            foreach (var skill in skillRemainingValues)
             {
-                foreach (var effectNameValueDic in skillRemainingValues[item.Key])
+                foreach (var effectDic in skillRemainingValues[skill.Key])
                 {
+                    string effectName = effectDic.Key.Replace(":", string.Empty);
+                    
 
-                    string effectName = effectNameValueDic.Key.Replace(":", string.Empty);
-                    List<string> effectValuesList = effectNameValueDic.Value.Split('/').ToList();
-                    effectNameCreator.InsertSkillEffectName(effectName, heroName, item.Key, effectValuesList);
+                    effectNameCreator.InsertSkillEffectName(effectName, heroName, skill, effectDic, skillRemainingValuesDescriptions);
                 }
             }
         }

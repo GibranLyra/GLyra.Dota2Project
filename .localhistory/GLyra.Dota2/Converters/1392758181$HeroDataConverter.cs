@@ -30,7 +30,7 @@ namespace Dota.CentralDota.Converters
         List<KeyValuePair<string, string>> skillTargetAffectedType;
         List<KeyValuePair<string, string>> skillDamageType;
         string skillVideo;
-        Dictionary<Skill, Dictionary<string, string>> skillRemainingValues;
+        Dictionary<string, Dictionary<string, string>> skillRemainingValues;
         HeroCreator heroCreator;
         SkillCreator skillCreator;
 
@@ -49,7 +49,7 @@ namespace Dota.CentralDota.Converters
             abilityCastType = new List<KeyValuePair<string, string>>();
             skillTargetAffectedType = new List<KeyValuePair<string, string>>();
             skillDamageType = new List<KeyValuePair<string, string>>();
-            skillRemainingValues = new Dictionary<Skill, Dictionary<string, string>>();
+            skillRemainingValues = new Dictionary<string, Dictionary<string, string>>();
             heroCreator = new HeroCreator();
             skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
@@ -70,14 +70,12 @@ namespace Dota.CentralDota.Converters
         {
             SkillEffectNameCreator effectNameCreator = new SkillEffectNameCreator();
 
-            foreach (var item in skillRemainingValues)
+            foreach (var skill in skillRemainingValues)
             {
-                foreach (var effectNameValueDic in skillRemainingValues[item.Key])
+                foreach (var effectDic in skillRemainingValues[skill.Key])
                 {
-
-                    string effectName = effectNameValueDic.Key.Replace(":", string.Empty);
-                    List<string> effectValuesList = effectNameValueDic.Value.Split('/').ToList();
-                    effectNameCreator.InsertSkillEffectName(effectName, heroName, item.Key, effectValuesList);
+                    string effectName = effectDic.Key.Replace(":", string.Empty);
+                    effectNameCreator.InsertSkillEffectName()
                 }
             }
         }
@@ -319,11 +317,13 @@ namespace Dota.CentralDota.Converters
             return damageTypeList;
         }
 
-        Dictionary<Skill, Dictionary<string, string>> GetSkillRemainingValues(HtmlDocument doc)
+        Dictionary<string, Dictionary<string, string>> GetSkillRemainingValues(HtmlDocument doc)
         {
-            var dicRemainingValues = new Dictionary<Skill, Dictionary<string, string>>();
+            var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
 
-            var skillList = new List<Skill>();//Where the skills are                        
+            var skillNameList = new List<string>();//Where the skillNames are            
+
+            skillDescriptions = new List<string>();//Where the skillDescriptions are
 
             //We need to take this nodelist to get the skillName of the remaining values
             var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
@@ -351,18 +351,17 @@ namespace Dota.CentralDota.Converters
 
                     //? Get the name of the skills that the current remanining values are
                     string skillName = getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]);
-                    var skillComparer = new Skill() { Name = skillName };//Create skillobject to do the comparison
 
-                    //? Get the description of the skills that the current remanining values are                    
-                    skillComparer.Description = getSkillDescriptionInRemainingSkill(abilityHeaderRowDescription[i]);
+                    //? Get the description of the skills that the current remanining values are
+                    skillRemainingValuesDescriptions.Add(getSkillDescriptionInRemainingSkill(abilityHeaderRowDescription[i]));
 
                     //Now a workaround, Because dictionaries doesn't accept keys with same value, we need to add a " " 
                     //to skills that have the same name.
-                    if (skillList.Contains(skillComparer))
-                        skillList.Add(workAroundToSkillsOfSameName(skillName));
+                    if(skillNameList.Contains(skillName))
+                        skillNameList.Add(workAroundToSkillsOfSameName(skillName));
                     else
-                        skillList.Add(skillComparer);
-                     //In case that no tag "br" exists, it means that the skill has only one description
+                        skillNameList.Add(skillName);
+                    //In case that no tag "br" exists, it means that the skill has only one description
                     //So we need to get the value inside the div tag
                     if (descriptionList.Count <= 0)
                     {
@@ -432,22 +431,22 @@ namespace Dota.CentralDota.Converters
                         dicDescValue.Add(skillEffectNameList[ix], skillEffectValuesList[ix]);    
                     }                    
 
-                    dicRemainingValues.Add(skillList[i], dicDescValue);
+                    dicRemainingValues.Add(skillNameList[i], dicDescValue);
                 }
                 //In this case, the skill don't have values or descriptions, so we only need to get their name
                 else if (abilityHeaderRowDescription != null)
                 {
-                    Skill skill = new Skill() { Name = getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]) };
-                    skillList.Add(skill);
+                    skillNameList.Add(getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]));
                 }
             }
+
+            
             return dicRemainingValues;
         }
 
-        protected Skill workAroundToSkillsOfSameName(string skillName)
+        protected string workAroundToSkillsOfSameName(string skillName)
         {
-            Skill skill = new Skill() { Name = skillName  + " "};
-            return skill;
+            return skillName + " ";
         }
 
         protected string workAroundToSkillsSameDescription(string skillDescription)

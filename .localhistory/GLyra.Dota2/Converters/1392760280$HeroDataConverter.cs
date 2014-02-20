@@ -76,7 +76,7 @@ namespace Dota.CentralDota.Converters
                 {
 
                     string effectName = effectNameValueDic.Key.Replace(":", string.Empty);
-                    List<string> effectValuesList = effectNameValueDic.Value.Split('/').ToList();
+                    List<string> effectValuesList = effectDic.Value.Split('/').ToList();
                     effectNameCreator.InsertSkillEffectName(effectName, heroName, item.Key, effectValuesList);
                 }
             }

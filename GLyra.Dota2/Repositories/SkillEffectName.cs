@@ -17,11 +17,11 @@ namespace GLyra.Dota2.Repositories
         public int ID { get; set; }
         public string Name { get; set; }
         public int SkillId { get; set; }
-        public Nullable<int> ValueLv1 { get; set; }
-        public Nullable<int> ValueLv2 { get; set; }
-        public Nullable<int> ValueLv3 { get; set; }
-        public Nullable<int> ValueLv4 { get; set; }
-        public Nullable<int> ValueScepter { get; set; }
+        public string ValueLv1 { get; set; }
+        public string ValueLv2 { get; set; }
+        public string ValueLv3 { get; set; }
+        public string ValueLv4 { get; set; }
+        public string ValueScepter { get; set; }
     
         public virtual Skill Skill { get; set; }
     }

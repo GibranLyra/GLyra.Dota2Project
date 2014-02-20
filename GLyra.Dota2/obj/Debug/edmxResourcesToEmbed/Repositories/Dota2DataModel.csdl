@@ -94,11 +94,11 @@
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="SkillId" Type="Int32" Nullable="false" />
-    <Property Name="ValueLv1" Type="Int32" />
-    <Property Name="ValueLv2" Type="Int32" />
-    <Property Name="ValueLv3" Type="Int32" />
-    <Property Name="ValueLv4" Type="Int32" />
-    <Property Name="ValueScepter" Type="Int32" />
+    <Property Name="ValueLv1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ValueLv2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ValueLv3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ValueLv4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ValueScepter" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Skill" Relationship="Self.FK_SkillEffectName_0" FromRole="SkillEffectName" ToRole="Skill" />
   </EntityType>
   <EntityType Name="SkillImage">

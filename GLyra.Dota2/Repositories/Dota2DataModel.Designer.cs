@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Gibras\Documents\Visual Studio 2013\Training\GLyra.Dota2Project\GLyra.Dota2\Repositories\Dota2DataModel.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\PersonalProjects\GLyra.Dota2\GLyra.Dota2\Repositories\Dota2DataModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

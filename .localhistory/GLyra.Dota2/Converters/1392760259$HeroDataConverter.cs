@@ -70,14 +70,13 @@ namespace Dota.CentralDota.Converters
         {
             SkillEffectNameCreator effectNameCreator = new SkillEffectNameCreator();
 
-            foreach (var item in skillRemainingValues)
+            foreach (var skill in skillRemainingValues)
             {
-                foreach (var effectNameValueDic in skillRemainingValues[item.Key])
+                foreach (var effectDic in skillRemainingValues[skill.Key])
                 {
-
-                    string effectName = effectNameValueDic.Key.Replace(":", string.Empty);
-                    List<string> effectValuesList = effectNameValueDic.Value.Split('/').ToList();
-                    effectNameCreator.InsertSkillEffectName(effectName, heroName, item.Key, effectValuesList);
+                    string effectName = effectDic.Key.Replace(":", string.Empty);
+                    
+                    //effectNameCreator.InsertSkillEffectName(effectName, heroName, skill, effectDic );
                 }
             }
         }

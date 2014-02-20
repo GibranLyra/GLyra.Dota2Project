@@ -23,15 +23,14 @@ namespace GLyra.Dota2.ModelCreators
                     skill = ctx.Skill.Include("Hero").Where(x => x.ID == skill.ID).First();
 
                     var result = from s in ctx.SkillEffectName
-                                 where s.Name == name
-                                    && s.SkillId == skill.ID
+                                 where s.SkillId == skill.ID
                                     && s.Skill.Hero.Name == skill.Hero.Name
                                     && s.Skill.Description == skill.Description
                                  select s;
 
                     if (result.Count() == 1)
                     {
-                        Console.WriteLine(result.First().ID +  " Skill " + name + " Already exists..." );
+                        Console.WriteLine("Skill " + name + " Already exists...");
                         skillEffectName = result.First();
                         return true;
                     }
@@ -67,16 +66,16 @@ namespace GLyra.Dota2.ModelCreators
             {
                 skillEffectName.Name = name.Trim();
                 skillEffectName.SkillId = completeSkill.ID;
-                if (skillEffectValues.FirstOrDefault() != null)
-                    skillEffectName.ValueLv1 = skillEffectValues.First();
-                if (skillEffectValues.ElementAtOrDefault(1) != null)
-                    skillEffectName.ValueLv2 = skillEffectValues.ElementAt(1);
-                if (skillEffectValues.ElementAtOrDefault(2) != null)
-                    skillEffectName.ValueLv3 = skillEffectValues.ElementAt(2);
-                if (skillEffectValues.ElementAtOrDefault(3) != null)
-                    skillEffectName.ValueLv4 = skillEffectValues. ElementAt(3);
-                if (skillEffectValues.LastOrDefault() != null)
-                    skillEffectName.ValueScepter = skillEffectValues.Last();            
+                skillEffectName.ValueLv1 = int.Parse(skillEffectValues.First());
+                skillEffectName.ValueLv2 = int.Parse(skillEffectValues.ElementAt(1));
+                skillEffectName.ValueLv1 = int.Parse(skillEffectValues.ElementAt(2));
+                skillEffectName.ValueLv1 = int.Parse(skillEffectValues.ElementAt(3));
+                skillEffectName.ValueLv1 = int.Parse(skillEffectValues.Last());
+                
+
+                prepareSkillEffectName(skillEffectName);
+
+                
 
                 using (Dota2Entities ctx = new Dota2Entities())
                 {
@@ -93,6 +92,13 @@ namespace GLyra.Dota2.ModelCreators
                 }
             }
             return skillEffectName;
+        }
+
+        protected SkillEffectName prepareSkillEffectName(SkillEffectName skillEffectName)
+        {
+            
+
+            return skillEffectName
         }
     }
 }

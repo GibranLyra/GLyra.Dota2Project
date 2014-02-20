@@ -227,7 +227,7 @@ namespace GLyra.Dota2.ModelCreators
 			return this.skill;
 		}
 
-        public static Skill SelectByName(string name)
+        public Skill SelectByName(string name)
         {
             Skill skill = new Skill();
             using (Dota2Entities ctx = new Dota2Entities())
@@ -245,7 +245,5 @@ namespace GLyra.Dota2.ModelCreators
 
             return skill;
         }
-
-
 	}
 }

@@ -227,25 +227,6 @@ namespace GLyra.Dota2.ModelCreators
 			return this.skill;
 		}
 
-        public static Skill SelectByName(string name)
-        {
-            Skill skill = new Skill();
-            using (Dota2Entities ctx = new Dota2Entities())
-            {
-                try
-                {
-                    skill = ctx.Skill.Where(s => s.Name == name).First();
-                }
-                catch (Exception e)
-                {
-                    //TODO adicionar log
-                    throw e;
-                }
-            }
-
-            return skill;
-        }
-
-
+        public void Select
 	}
 }

@@ -79,11 +79,11 @@
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="SkillId" Type="int" Nullable="false" />
-    <Property Name="ValueLv1" Type="int" />
-    <Property Name="ValueLv2" Type="int" />
-    <Property Name="ValueLv3" Type="int" />
-    <Property Name="ValueLv4" Type="int" />
-    <Property Name="ValueScepter" Type="int" />
+    <Property Name="ValueLv1" Type="varchar" MaxLength="50" />
+    <Property Name="ValueLv2" Type="varchar" MaxLength="50" />
+    <Property Name="ValueLv3" Type="varchar" MaxLength="50" />
+    <Property Name="ValueLv4" Type="varchar" MaxLength="50" />
+    <Property Name="ValueScepter" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="SkillImage">
     <Key>

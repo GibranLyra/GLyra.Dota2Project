@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c0fb096c9cdb492d870c87612af62813" Name="Diagram1">
+      <Diagram DiagramId="ffdcef374d02461ea72d852a60505744" Name="Diagram1">
         <EntityTypeShape EntityType="Dota2Model.AbilityType" Width="1.5" PointX="6" PointY="2.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.Attributes" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.DamageType" Width="1.5" PointX="3.75" PointY="2.625" IsExpanded="true" />

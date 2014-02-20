@@ -20,7 +20,6 @@ namespace Dota.CentralDota.Converters
         List<string> skillImages;
         List<string> skillNames;
         List<string> skillDescriptions;
-        List<string> skillRemainingValuesDescriptions;//List os the descriptions collected in the remainingvalues method //TODO re-do this
         List<string> primaryStatsImages;
         Dictionary<string, string> primaryStatsValues;
         string biography;
@@ -30,7 +29,7 @@ namespace Dota.CentralDota.Converters
         List<KeyValuePair<string, string>> skillTargetAffectedType;
         List<KeyValuePair<string, string>> skillDamageType;
         string skillVideo;
-        Dictionary<Skill, Dictionary<string, string>> skillRemainingValues;
+        Dictionary<string, Dictionary<string, string>> skillRemainingValues;
         HeroCreator heroCreator;
         SkillCreator skillCreator;
 
@@ -41,7 +40,6 @@ namespace Dota.CentralDota.Converters
             skillImages = new List<string>();
             skillNames = new List<string>();
             skillDescriptions = new List<string>();
-            skillRemainingValuesDescriptions = new List<string>();
             primaryStatsImages = new List<string>();
             primaryStatsValues = new Dictionary<string, string>();
             manaCostDictionary = new List<KeyValuePair<string, string>>();
@@ -49,7 +47,7 @@ namespace Dota.CentralDota.Converters
             abilityCastType = new List<KeyValuePair<string, string>>();
             skillTargetAffectedType = new List<KeyValuePair<string, string>>();
             skillDamageType = new List<KeyValuePair<string, string>>();
-            skillRemainingValues = new Dictionary<Skill, Dictionary<string, string>>();
+            skillRemainingValues = new Dictionary<string, Dictionary<string, string>>();
             heroCreator = new HeroCreator();
             skillCreator = new SkillCreator();
             agilityPackHelper = new AgilityPackHelper();
@@ -66,18 +64,21 @@ namespace Dota.CentralDota.Converters
             }
         }
 
+        protected Dictionary<string, Dictionary<string, string>> getRemainingSkillValues(HtmlDocument doc, string heroName, out List<string> remainingValuesSkillNameList)
+        {
+            return GetSkillRemainingValues(doc, out remainingValuesSkillNameList);
+        }
+
         protected void createSkillEffectName(string heroName)
         {
             SkillEffectNameCreator effectNameCreator = new SkillEffectNameCreator();
 
-            foreach (var item in skillRemainingValues)
+            foreach (var skill in skillRemainingValues)
             {
-                foreach (var effectNameValueDic in skillRemainingValues[item.Key])
+                foreach (var effectDic in skillRemainingValues[skill.Key])
                 {
-
-                    string effectName = effectNameValueDic.Key.Replace(":", string.Empty);
-                    List<string> effectValuesList = effectNameValueDic.Value.Split('/').ToList();
-                    effectNameCreator.InsertSkillEffectName(effectName, heroName, item.Key, effectValuesList);
+                    string effectName = effectDic.Key.Replace(":", string.Empty);
+                    effectNameCreator.checkIfSkillNameExists(effectName);
                 }
             }
         }
@@ -85,6 +86,10 @@ namespace Dota.CentralDota.Converters
         protected void getDataFromHtml(string heroName)
         {
             HtmlDocument doc = new HtmlDocument();
+
+            //A list to support the remainingValuesList,
+            //we need this to connect the remainingValues to a skill
+            List<string> remainingValuesSkillNameList = new List<string>();
 
             doc = LoadHeroHtmlPage(heroName);
 
@@ -100,8 +105,7 @@ namespace Dota.CentralDota.Converters
             skillTargetAffectedType = GetSkillTargetAffectedType(doc);
             skillDamageType = GetSkillDamageType(doc);
             skillVideo = GetSkillVideo(doc);
-            skillRemainingValues = GetSkillRemainingValues(doc);
-
+            skillRemainingValues = getRemainingSkillValues(doc, heroName, out remainingValuesSkillNameList);
             Console.WriteLine("Getting info from Dota2 page Completed");
         }
 
@@ -319,11 +323,11 @@ namespace Dota.CentralDota.Converters
             return damageTypeList;
         }
 
-        Dictionary<Skill, Dictionary<string, string>> GetSkillRemainingValues(HtmlDocument doc)
+        Dictionary<string, Dictionary<string, string>> GetSkillRemainingValues(HtmlDocument doc, out List<string> skillNameList)
         {
-            var dicRemainingValues = new Dictionary<Skill, Dictionary<string, string>>();
+            var dicRemainingValues = new Dictionary<string, Dictionary<string, string>>();
 
-            var skillList = new List<Skill>();//Where the skills are                        
+            skillNameList = new List<string>();//Where the skillNames are            
 
             //We need to take this nodelist to get the skillName of the remaining values
             var abilityHeaderRowDescription = doc.DocumentNode.SelectNodes("//*[@class = 'abilityHeaderRowDescription']");
@@ -333,8 +337,8 @@ namespace Dota.CentralDota.Converters
 
             for (int i = 0; i < abilityFooterBoxRight.Count; i++)
 			{
-                var skillEffectNameList = new List<string>();//Where the descriptions of the skills are
-                var skillEffectValuesList = new List<string>(); //Where the values of the skills are
+                var skillDescriptionList = new List<string>();//Where the descriptions of the skills are
+                var skillValuesList = new List<string>(); //Where the values of the skills are
 
                 var divInnerHtml = abilityFooterBoxRight[i].SelectNodes(".//*[contains(@span, '')]");
 
@@ -351,23 +355,18 @@ namespace Dota.CentralDota.Converters
 
                     //? Get the name of the skills that the current remanining values are
                     string skillName = getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]);
-                    var skillComparer = new Skill() { Name = skillName };//Create skillobject to do the comparison
-
-                    //? Get the description of the skills that the current remanining values are                    
-                    skillComparer.Description = getSkillDescriptionInRemainingSkill(abilityHeaderRowDescription[i]);
-
                     //Now a workaround, Because dictionaries doesn't accept keys with same value, we need to add a " " 
                     //to skills that have the same name.
-                    if (skillList.Contains(skillComparer))
-                        skillList.Add(workAroundToSkillsOfSameName(skillName));
+                    if(skillNameList.Contains(skillName))
+                        skillNameList.Add(workAroundToSkillsOfSameName(skillName));
                     else
-                        skillList.Add(skillComparer);
-                     //In case that no tag "br" exists, it means that the skill has only one description
+                        skillNameList.Add(skillName);
+                    //In case that no tag "br" exists, it means that the skill has only one description
                     //So we need to get the value inside the div tag
                     if (descriptionList.Count <= 0)
                     {
                         HtmlNode htmlNode = abilityFooterBoxRight[i].ChildNodes.Where(x => x.Name == "#text").First();
-                        skillEffectNameList.Add(htmlNode.InnerText.Trim());
+                        skillDescriptionList.Add(htmlNode.InnerText.Trim());
                     }
 
                     else
@@ -376,18 +375,18 @@ namespace Dota.CentralDota.Converters
                         {
                             //Como pegando somente o nextSibling perdemos o primeiro texto, quando o I for 0, pegamos o 1° texto
                             if (it == 0)
-                                skillEffectNameList.Add(descriptionList[it].PreviousSibling.PreviousSibling.InnerText.Trim());
+                                skillDescriptionList.Add(descriptionList[it].PreviousSibling.PreviousSibling.InnerText.Trim());
 
                             if (descriptionList.Count > 1)
                             {
                                 //When the value is "" the skill must be a scepter upgrade, so we need to check the scepterVal class
                                 if (descriptionList[it].NextSibling.InnerText.Trim() == "")
                                 {
-                                    skillEffectNameList.Add(descriptionList[it].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
+                                    skillDescriptionList.Add(descriptionList[it].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First().InnerText.Trim());
                                     divInnerHtml.Remove(descriptionList[it].ParentNode.SelectNodes(".//*[@class = 'scepterVal']").First());
                                 }
                                 else
-                                    skillEffectNameList.Add(descriptionList[it].NextSibling.InnerText.Trim());
+                                    skillDescriptionList.Add(descriptionList[it].NextSibling.InnerText.Trim());
                             }
 
                         }
@@ -395,11 +394,11 @@ namespace Dota.CentralDota.Converters
 
                     foreach (var span in valuesList)
                     {
-                        skillEffectValuesList.Add(span.InnerText.Trim());
+                        skillValuesList.Add(span.InnerText.Trim());
                     }
                     Dictionary<string, string> dicDescValue = new Dictionary<string, string>();
 
-                    for (int ix = 0; ix < skillEffectNameList.Count; ix++)
+                    for (int ix = 0; ix < skillDescriptionList.Count; ix++)
                     {
                         //Now a workaround, Because dictionaries doesn't accept keys with same value, we need to add a " " 
                         //to skillDescriptionList that have the same name.
@@ -409,45 +408,51 @@ namespace Dota.CentralDota.Converters
                         //}
                         //else
 
-
-                        if (skillEffectNameList.Count != skillEffectNameList.Distinct().Count())
+                        if (skillDescriptionList.Count != skillDescriptionList.Distinct().Count())
                         {
-                            var duplicates = skillEffectNameList.GroupBy(s => s).SelectMany(grp => grp.Skip(1));
+                            var duplicates = skillDescriptionList.GroupBy(s => s).SelectMany(grp => grp.Skip(1));
 
 
                             //TODO Comentar isto
                             foreach (var duplicate in duplicates)
                             {
-                                for (int it = 0; it < skillEffectNameList.Count; it++)
+                                for (int it = 0; it < skillDescriptionList.Count; it++)
                                 {
-                                    if (skillEffectNameList[it].Contains(duplicate))
+                                    if (skillDescriptionList[it].Contains(duplicate))
                                     {
-                                        skillEffectNameList[it] = skillEffectNameList[it] + " ";
+                                        skillDescriptionList[it] = skillDescriptionList[it] + " ";
                                     }
                                 }    
                             }
                             
                         }
 
-                        dicDescValue.Add(skillEffectNameList[ix], skillEffectValuesList[ix]);    
+                        dicDescValue.Add(skillDescriptionList[ix], skillValuesList[ix]);    
                     }                    
 
-                    dicRemainingValues.Add(skillList[i], dicDescValue);
+                    dicRemainingValues.Add(skillNameList[i], dicDescValue);
                 }
                 //In this case, the skill don't have values or descriptions, so we only need to get their name
                 else if (abilityHeaderRowDescription != null)
                 {
-                    Skill skill = new Skill() { Name = getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]) };
-                    skillList.Add(skill);
+                    skillNameList.Add(getSkillNameInRemainingSkill(abilityHeaderRowDescription[i]));
                 }
             }
+
+            //Fill the dictionary with data
+            //Data is Key Name
+            //Another dictionary with Description and values
+            foreach (var skillName in skillNameList)
+	        {
+                
+	        }
+            
             return dicRemainingValues;
         }
 
-        protected Skill workAroundToSkillsOfSameName(string skillName)
+        protected string workAroundToSkillsOfSameName(string skillName)
         {
-            Skill skill = new Skill() { Name = skillName  + " "};
-            return skill;
+            return skillName + " ";
         }
 
         protected string workAroundToSkillsSameDescription(string skillDescription)
@@ -462,15 +467,6 @@ namespace Dota.CentralDota.Converters
         {
             string skillName = abilityHeaderRowDescriptionClassNode.ChildNodes.Where(x => x.Name == "h2").First().InnerText.Trim();
             return skillName;
-        }
-
-        /// <summary>
-        /// Returns the description of the skill when the node is inside the abilityHeaderRowDescription class
-        /// </summary>
-        protected string getSkillDescriptionInRemainingSkill(HtmlNode abilityHeaderRowDescriptionClassNode)
-        {
-            string skillDescription = abilityHeaderRowDescriptionClassNode.ChildNodes.Where(x => x.Name == "p").First().InnerText.Trim();
-            return skillDescription;
         }
 
         string GetSkillVideo(HtmlDocument doc)

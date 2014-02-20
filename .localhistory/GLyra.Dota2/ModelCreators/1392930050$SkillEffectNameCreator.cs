@@ -23,15 +23,14 @@ namespace GLyra.Dota2.ModelCreators
                     skill = ctx.Skill.Include("Hero").Where(x => x.ID == skill.ID).First();
 
                     var result = from s in ctx.SkillEffectName
-                                 where s.Name == name
-                                    && s.SkillId == skill.ID
+                                 where s.SkillId == skill.ID
                                     && s.Skill.Hero.Name == skill.Hero.Name
                                     && s.Skill.Description == skill.Description
                                  select s;
 
                     if (result.Count() == 1)
                     {
-                        Console.WriteLine(result.First().ID +  " Skill " + name + " Already exists..." );
+                        Console.WriteLine("Skill " + name + " Already exists...");
                         skillEffectName = result.First();
                         return true;
                     }

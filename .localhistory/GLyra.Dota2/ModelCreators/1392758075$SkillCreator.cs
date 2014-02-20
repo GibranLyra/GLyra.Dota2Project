@@ -235,6 +235,8 @@ namespace GLyra.Dota2.ModelCreators
                 try
                 {
                     skill = ctx.Skill.Where(s => s.Name == name).First();
+                    if (skill == null)
+                        return null;
                 }
                 catch (Exception e)
                 {
