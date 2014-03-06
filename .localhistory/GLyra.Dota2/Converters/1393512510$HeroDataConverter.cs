@@ -14,7 +14,7 @@ namespace Dota.CentralDota.Converters
 		private bool isInsert = false;
 
 		private AgilityPackHelper agilityPackHelper;
-		private List<string> heroesNames;
+		private List<string> heroNames;
         private List<string> heroPortraits;
 		private List<string> heroesUrl;
 		private List<string> skillImages;
@@ -37,7 +37,7 @@ namespace Dota.CentralDota.Converters
 
 		public HeroDataConverter()
 		{
-			heroesNames = new List<string>();
+			heroNames = new List<string>();
 			heroesUrl = new List<string>();
             heroPortraits = new List<string>();
 			skillImages = new List<string>();
@@ -56,20 +56,19 @@ namespace Dota.CentralDota.Converters
 			skillCreator = new SkillCreator();
 			agilityPackHelper = new AgilityPackHelper();
 
-			heroesNames = GetHeroesName();
+			heroNames = GetHeroesName();
 
-            for (int i = 0; i < heroesNames.Count; i++)
+            for (int i = 0; i < heroNames.Count; i++)
             {
                 if (!isInsert)
-                    currentHero = heroCreator.getHeroByName(heroesNames[i]);
+                    currentHero = heroCreator.getHeroByName(heroNames[i]);
                 else
-                    heroCreator.createHero(heroesNames[i], biography);
+                    heroCreator.createHero(heroNames[i], biography);
 
 
 
-                getDataFromHtml(heroesNames[i]);
-                //TODO When add more than one image, fix this 
-                createHeroPortrait(heroPortraits[0]);
+                getDataFromHtml(heroNames[i]);
+                createHeroPortrait(heroPortraits)
 
                 //createSkillEffectName(heroesNames[i]);
 

@@ -17,7 +17,7 @@ namespace GLyra.Dota2.Repositories
         public Hero()
         {
             this.Attributes = new HashSet<Attributes>();
-            this.HeroPortraits = new HashSet<HeroPortraits>();
+            this.HeroPortrait = new HashSet<HeroPortrait>();
             this.Skill = new HashSet<Skill>();
         }
     
@@ -27,7 +27,7 @@ namespace GLyra.Dota2.Repositories
         public Nullable<int> HeroPortraitsId { get; set; }
     
         public virtual ICollection<Attributes> Attributes { get; set; }
-        public virtual ICollection<HeroPortraits> HeroPortraits { get; set; }
+        public virtual ICollection<HeroPortrait> HeroPortrait { get; set; }
         public virtual ICollection<Skill> Skill { get; set; }
     }
 }

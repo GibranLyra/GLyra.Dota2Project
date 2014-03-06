@@ -10,18 +10,20 @@ namespace GLyra.Dota2.ModelCreators
 {
     public class HeroCreator
     {
+        Hero hero;
+        
         public Hero createHero(string heroName, string biography)
         {
-            Hero hero = new Hero();
+            this.hero = new Hero();
 
-            hero.Name = heroName;
-            hero.Biography = biography;
+            this.hero.Name = heroName;
+            this.hero.Biography = biography;
 
             using (Dota2Entities ctx = new Dota2Entities())
             {
                 try
                 {
-                    ctx.Hero.Add(hero);
+                    ctx.Hero.Add(this.hero);
 
                     ctx.SaveChanges();
                     Console.WriteLine("*************************** " + heroName + " Created(Hero)" + "***************************");
@@ -33,30 +35,20 @@ namespace GLyra.Dota2.ModelCreators
                 }
             }
 
-            return hero;
+            return this.hero;
         }
 
-        public Skill createHeroSkill(int heroId, string name, string description, List<KeyValuePair<string, string>> manaCostList, List<KeyValuePair<string, string>> coolDownList,
+        public Skill createHeroSkill(string name, string description, List<KeyValuePair<string, string>> manaCostList, List<KeyValuePair<string, string>> coolDownList,
             List<KeyValuePair<string, string>> abilityCastTypeList, List<KeyValuePair<string, string>> targetAffectedTypeList, List<KeyValuePair<string, string>> damageTypeList, string videoUrl)
         {
             SkillCreator sCreator = new SkillCreator();
-            return sCreator.createSkill(heroId, name, description, manaCostList, coolDownList, abilityCastTypeList, targetAffectedTypeList, damageTypeList, videoUrl);
+            return sCreator.createSkill(this.hero.ID, name, description, manaCostList, coolDownList, abilityCastTypeList, targetAffectedTypeList, damageTypeList, videoUrl);
         }
 
-        public void createHeroPrimaryStats(int heroId, Dictionary<string, string> primaryStats)
+        public void createHeroPrimaryStats(Dictionary<string, string> primaryStats)
         {
-            AttributesCreator aCreator = new AttributesCreator(heroId, primaryStats);            
-        }
-
-        public Hero getHeroByName(string heroName)
-        {
-            Hero hero = new Hero();
-            using (Dota2Entities ctx = new Dota2Entities())
-            {
-                hero = ctx.Hero.Where(h => h.Name == heroName).FirstOrDefault();
-            }
-
-            return hero;
+            AttributesCreator aCreator = new AttributesCreator(this.hero.ID, primaryStats);
+            
         }
     }
 }

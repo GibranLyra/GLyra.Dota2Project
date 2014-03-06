@@ -15,70 +15,62 @@ namespace GLyra.Dota2.ModelCreators
 		public Skill createSkill(int heroId, string name, string description, List<KeyValuePair<string, string>> manaCostList, List<KeyValuePair<string, string>> coolDownList,
 			List<KeyValuePair<string, string>> abilityCastTypeList, List<KeyValuePair<string, string>> targetAffectedTypeList, List<KeyValuePair<string, string>> damageTypeList, string videoUrl)
 		{
+			this.skill = new Skill();
+			this.abilityTypeList = new List<AbilityType>();
+			this.skill.HeroId = heroId;
+			this.skill.Name = name;
+			this.skill.Description = description;
+			this.skill.VideoUrl = videoUrl;
 
-            if (SkillExists(name, description, heroId))
-            {
-                return SelectSkill(name, description, heroId);
-            }
-            else
-            {
-                this.skill = new Skill();
-                this.abilityTypeList = new List<AbilityType>();
-                this.skill.HeroId = heroId;
-                this.skill.Name = name;
-                this.skill.Description = description;
-                this.skill.VideoUrl = videoUrl;
+			//Set Up ManaCost
+			foreach (var manaCost in manaCostList)
+			{
+				//Check if the mana cost is for the current skill
+				//We need to check this because certain skills don't need mana
+				if (manaCost.Key == this.skill.Name)
+				{
+					setManaCost(manaCost.Value);
+				}
+			}
 
-                //Set Up ManaCost
-                foreach (var manaCost in manaCostList)
-                {
-                    //Check if the mana cost is for the current skill
-                    //We need to check this because certain skills don't need mana
-                    if (manaCost.Key == this.skill.Name)
-                    {
-                        setManaCost(manaCost.Value);
-                    }
-                }
+			//Set up CoolDowns
+			foreach (var coolDown in coolDownList)
+			{
+				//Check if the coolDown is for the current skill
+				//We need to check this because certain skills don't have coolDown
+				if (coolDown.Key == this.skill.Name)
+					setCoolDowns(coolDown.Value);
+			}
 
-                //Set up CoolDowns
-                foreach (var coolDown in coolDownList)
-                {
-                    //Check if the coolDown is for the current skill
-                    //We need to check this because certain skills don't have coolDown
-                    if (coolDown.Key == this.skill.Name)
-                        setCoolDowns(coolDown.Value);
-                }
+			foreach (var abilityCastType in abilityCastTypeList)
+			{
+				//Check if the AbilityCastType is for the current skill
+				//We need to check this because certain skills don't have AbilityCastType
+				if (abilityCastType.Key == this.skill.Name)
+				{
+					if (!string.IsNullOrEmpty(abilityCastType.Value))
+						setAbilityCastType(abilityCastType.Value);
+				}
+			}
 
-                foreach (var abilityCastType in abilityCastTypeList)
-                {
-                    //Check if the AbilityCastType is for the current skill
-                    //We need to check this because certain skills don't have AbilityCastType
-                    if (abilityCastType.Key == this.skill.Name)
-                    {
-                        if (!string.IsNullOrEmpty(abilityCastType.Value))
-                            setAbilityCastType(abilityCastType.Value);
-                    }
-                }
+			foreach (var targetAffectedType in targetAffectedTypeList)
+			{
+				//Check if the targetAffectedType is for the current skill
+				//We need to check this because certain skills don't have targetAffectedType
+				if (!string.IsNullOrEmpty(targetAffectedType.Value))
+					setTargetAffectedType(targetAffectedType.Value);
+			}
 
-                foreach (var targetAffectedType in targetAffectedTypeList)
-                {
-                    //Check if the targetAffectedType is for the current skill
-                    //We need to check this because certain skills don't have targetAffectedType
-                    if (!string.IsNullOrEmpty(targetAffectedType.Value))
-                        setTargetAffectedType(targetAffectedType.Value);
-                }
+			foreach (var damageType in damageTypeList)
+			{
+				//Check if the damageType is for the current skill
+				//We need to check this because certain skills don't have damageType
+				if (!string.IsNullOrEmpty(damageType.Value))
+					setDamageType(damageType.Value);
+			}
 
-                foreach (var damageType in damageTypeList)
-                {
-                    //Check if the damageType is for the current skill
-                    //We need to check this because certain skills don't have damageType
-                    if (!string.IsNullOrEmpty(damageType.Value))
-                        setDamageType(damageType.Value);
-                }
+			InsertSkill();
 
-                InsertSkill();
-
-            }
 			return this.skill;
 		}
 
@@ -202,7 +194,7 @@ namespace GLyra.Dota2.ModelCreators
 		/// <summary>
 		/// Insert a new Skill and SkillAbilityTypes
 		/// </summary>        
-		private Skill InsertSkill()
+		Skill InsertSkill()
 		{
 			SkillAbilityTypesCreator skillAbilityTypesCreator = new SkillAbilityTypesCreator();
 			bool isSkillAbilityTypeInserted = false;
@@ -235,45 +227,14 @@ namespace GLyra.Dota2.ModelCreators
 			return this.skill;
 		}
 
-        public static Skill SelectSkill(string name, string description, int heroId)
+        public static Skill SelectByName(string name)
         {
             Skill skill = new Skill();
             using (Dota2Entities ctx = new Dota2Entities())
             {
                 try
                 {
-                    skill = ctx.Skill.Where(s => s.Name == name &&
-                                                 s.HeroId == heroId &&
-                                                 s.Description == description).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    //TODO adicionar log
-                    throw e;
-                }
-            }
-
-            return skill;
-        }
-
-        
-        /// <summary>
-        /// Workaround 
-        /// Get the first skill description because there're skills that have the same name and the same heroName, but they are equals, so get the first description
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="description"></param>
-        /// <param name="heroId"></param>
-        /// <returns></returns>
-        public static Skill SelectSkill(string name, int heroId)
-        {
-            Skill skill = new Skill();
-            using (Dota2Entities ctx = new Dota2Entities())
-            {
-                try
-                {
-                    skill = ctx.Skill.Where(s => s.Name == name &&
-                                                 s.HeroId == heroId).FirstOrDefault();
+                    skill = ctx.Skill.Where(s => s.Name == name).First();
                 }
                 catch (Exception e)
                 {
@@ -286,20 +247,5 @@ namespace GLyra.Dota2.ModelCreators
         }
 
 
-        public bool SkillExists(string skillName, string skillDescription, int heroId)
-        {
-            //Check if the skill exists
-            using (Dota2Entities ctx = new Dota2Entities())
-            {
-                bool skillExists = ctx.Skill.Any(s => s.HeroId == heroId
-                                      && s.Name == skillName
-                                    && s.Description == skillDescription);
-
-                return skillExists;
-            }
-                                    
-        }
 	}
-
-
 }

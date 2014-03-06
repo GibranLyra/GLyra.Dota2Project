@@ -15,7 +15,6 @@ namespace Dota.CentralDota.Converters
 
 		private AgilityPackHelper agilityPackHelper;
 		private List<string> heroesNames;
-        private List<string> heroPortraits;
 		private List<string> heroesUrl;
 		private List<string> skillImages;
 		private List<string> skillNames;
@@ -39,7 +38,6 @@ namespace Dota.CentralDota.Converters
 		{
 			heroesNames = new List<string>();
 			heroesUrl = new List<string>();
-            heroPortraits = new List<string>();
 			skillImages = new List<string>();
 			skillNames = new List<string>();
 			skillDescriptions = new List<string>();
@@ -63,25 +61,29 @@ namespace Dota.CentralDota.Converters
                 if (!isInsert)
                     currentHero = heroCreator.getHeroByName(heroesNames[i]);
                 else
-                    heroCreator.createHero(heroesNames[i], biography);
+                    heroCreator.createHero(heroName, biography);
 
 
 
-                getDataFromHtml(heroesNames[i]);
-                //TODO When add more than one image, fix this 
-                createHeroPortrait(heroPortraits[0]);
+                getDataFromHtml(heroName);
 
-                //createSkillEffectName(heroesNames[i]);
+
+                //createSkillEffectName(heroName);
 
                 //createSkill();
                 //createPrimaryAttributes();
             }
+
+			foreach (var heroName in heroesNames)
+			{
+				
+			}
 		}
 
-        void createHeroPortrait(string heroPortraitUrl)
+        void createHeroPortrait()
         {
             HeroPortraitCreator heroPortraitCreator = new HeroPortraitCreator();
-            heroPortraitCreator.InsertHeroPortrait(currentHero.ID, heroPortraitUrl);
+            heroPortraitCreator.InsertHeroPortrait(currentHero.HeroPortraitsId)
         }
 
 		protected void createSkillEffectName(string heroName)
@@ -106,8 +108,7 @@ namespace Dota.CentralDota.Converters
 
 			doc = LoadHeroHtmlPage(heroName);
 
-            heroPortraits = GetSkillPortraits(doc);
-			skillImages = GetSkillImages(doc);
+			skillImages = GetSkillPortraits(doc);
 			skillNames = GetSkillNames(doc);
 			skillDescriptions = GetSkillDescriptions(doc);
 			primaryStatsImages = GetPrimaryStatsImages(doc);
@@ -123,19 +124,6 @@ namespace Dota.CentralDota.Converters
 
 			Console.WriteLine("Getting info from Dota2 page Completed");
 		}
-
-        private List<string> GetSkillPortraits(HtmlDocument doc)
-        {
-            int expectedSize = 1;
-            List<string> heroesPortraitsUrlsList = new List<string>();
-
-            var heroTopPortraitContainer = doc.DocumentNode.SelectNodes("//*[(@id = 'heroTopPortraitContainer')]");
-
-            heroesPortraitsUrlsList = agilityPackHelper.GetImageUrls(heroTopPortraitContainer, "heroPortraitImg", expectedSize);
-
-            return heroesPortraitsUrlsList;
-
-        }
 
 		protected void createSkill()
 		{
@@ -201,7 +189,7 @@ namespace Dota.CentralDota.Converters
 			return names.ToList();
 		}
 
-		private List<string> GetSkillImages(HtmlDocument doc)
+		private List<string> GetSkillPortraits(HtmlDocument doc)
 		{
 			int expectedSize = 1;
 			List<string> habilityImgUrlsList = new List<string>();

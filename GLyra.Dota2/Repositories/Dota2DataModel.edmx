@@ -41,11 +41,11 @@
           <Property Name="Biography" Type="varchar(max)" Nullable="false" />
           <Property Name="HeroPortraitsId" Type="int" />
         </EntityType>
-        <EntityType Name="HeroPortraits">
+        <EntityType Name="HeroPortrait">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HeroId" Type="int" Nullable="false" />
           <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
@@ -94,7 +94,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SkillId" Type="int" Nullable="false" />
           <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
@@ -117,14 +117,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_HeroPortraits_0">
+        <Association Name="FK_HeroPortrait_0">
           <End Role="Hero" Type="Self.Hero" Multiplicity="1" />
-          <End Role="HeroPortraits" Type="Self.HeroPortraits" Multiplicity="*" />
+          <End Role="HeroPortrait" Type="Self.HeroPortrait" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Hero">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="HeroPortraits">
+            <Dependent Role="HeroPortrait">
               <PropertyRef Name="HeroId" />
             </Dependent>
           </ReferentialConstraint>
@@ -218,7 +218,7 @@
           <EntitySet Name="Attributes" EntityType="Self.Attributes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DamageType" EntityType="Self.DamageType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hero" EntityType="Self.Hero" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="HeroPortraits" EntityType="Self.HeroPortraits" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HeroPortrait" EntityType="Self.HeroPortrait" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkillAbilityTypes" EntityType="Self.SkillAbilityTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SkillEffectName" EntityType="Self.SkillEffectName" Schema="dbo" store:Type="Tables" />
@@ -228,9 +228,9 @@
             <End Role="Hero" EntitySet="Hero" />
             <End Role="Attributes" EntitySet="Attributes" />
           </AssociationSet>
-          <AssociationSet Name="FK_HeroPortraits_0" Association="Self.FK_HeroPortraits_0">
+          <AssociationSet Name="FK_HeroPortrait_0" Association="Self.FK_HeroPortrait_0">
             <End Role="Hero" EntitySet="Hero" />
-            <End Role="HeroPortraits" EntitySet="HeroPortraits" />
+            <End Role="HeroPortrait" EntitySet="HeroPortrait" />
           </AssociationSet>
           <AssociationSet Name="FK_Skill_0" Association="Self.FK_Skill_0">
             <End Role="Hero" EntitySet="Hero" />
@@ -305,17 +305,17 @@
           <Property Name="Biography" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="HeroPortraitsId" Type="Int32" />
           <NavigationProperty Name="Attributes" Relationship="Self.FK_Attributes_0" FromRole="Hero" ToRole="Attributes" />
-          <NavigationProperty Name="HeroPortraits" Relationship="Self.FK_HeroPortraits_0" FromRole="Hero" ToRole="HeroPortraits" />
+          <NavigationProperty Name="HeroPortrait" Relationship="Self.FK_HeroPortrait_0" FromRole="Hero" ToRole="HeroPortrait" />
           <NavigationProperty Name="Skill" Relationship="Self.FK_Skill_0" FromRole="Hero" ToRole="Skill" />
         </EntityType>
-        <EntityType Name="HeroPortraits">
+        <EntityType Name="HeroPortrait">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HeroId" Type="Int32" Nullable="false" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Hero" Relationship="Self.FK_HeroPortraits_0" FromRole="HeroPortraits" ToRole="Hero" />
+          <NavigationProperty Name="Hero" Relationship="Self.FK_HeroPortrait_0" FromRole="HeroPortrait" ToRole="Hero" />
         </EntityType>
         <EntityType Name="Skill">
           <Key>
@@ -371,7 +371,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SkillId" Type="Int32" Nullable="false" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Skill" Relationship="Self.FK_SkillImage_0" FromRole="SkillImage" ToRole="Skill" />
@@ -420,14 +420,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_HeroPortraits_0">
+        <Association Name="FK_HeroPortrait_0">
           <End Role="Hero" Type="Self.Hero" Multiplicity="1" />
-          <End Role="HeroPortraits" Type="Self.HeroPortraits" Multiplicity="*" />
+          <End Role="HeroPortrait" Type="Self.HeroPortrait" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Hero">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="HeroPortraits">
+            <Dependent Role="HeroPortrait">
               <PropertyRef Name="HeroId" />
             </Dependent>
           </ReferentialConstraint>
@@ -497,7 +497,7 @@
           <EntitySet Name="Attributes" EntityType="Self.Attributes" />
           <EntitySet Name="DamageType" EntityType="Self.DamageType" />
           <EntitySet Name="Hero" EntityType="Self.Hero" />
-          <EntitySet Name="HeroPortraits" EntityType="Self.HeroPortraits" />
+          <EntitySet Name="HeroPortrait" EntityType="Self.HeroPortrait" />
           <EntitySet Name="Skill" EntityType="Self.Skill" />
           <EntitySet Name="SkillAbilityTypes" EntityType="Self.SkillAbilityTypes" />
           <EntitySet Name="SkillEffectName" EntityType="Self.SkillEffectName" />
@@ -515,9 +515,9 @@
             <End Role="DamageType" EntitySet="DamageType" />
             <End Role="Skill" EntitySet="Skill" />
           </AssociationSet>
-          <AssociationSet Name="FK_HeroPortraits_0" Association="Self.FK_HeroPortraits_0">
+          <AssociationSet Name="FK_HeroPortrait_0" Association="Self.FK_HeroPortrait_0">
             <End Role="Hero" EntitySet="Hero" />
-            <End Role="HeroPortraits" EntitySet="HeroPortraits" />
+            <End Role="HeroPortrait" EntitySet="HeroPortrait" />
           </AssociationSet>
           <AssociationSet Name="FK_Skill_0" Association="Self.FK_Skill_0">
             <End Role="Hero" EntitySet="Hero" />
@@ -586,9 +586,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="HeroPortraits">
-            <EntityTypeMapping TypeName="Dota2Model.HeroPortraits">
-              <MappingFragment StoreEntitySet="HeroPortraits">
+          <EntitySetMapping Name="HeroPortrait">
+            <EntityTypeMapping TypeName="Dota2Model.HeroPortrait">
+              <MappingFragment StoreEntitySet="HeroPortrait">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="HeroId" ColumnName="HeroId" />
                 <ScalarProperty Name="Url" ColumnName="Url" />

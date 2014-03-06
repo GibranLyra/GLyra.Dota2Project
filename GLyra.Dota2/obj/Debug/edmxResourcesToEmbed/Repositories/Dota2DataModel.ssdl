@@ -36,11 +36,11 @@
     <Property Name="Biography" Type="varchar(max)" Nullable="false" />
     <Property Name="HeroPortraitsId" Type="int" />
   </EntityType>
-  <EntityType Name="HeroPortraits">
+  <EntityType Name="HeroPortrait">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="HeroId" Type="int" Nullable="false" />
     <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
@@ -89,7 +89,7 @@
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="SkillId" Type="int" Nullable="false" />
     <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
@@ -112,14 +112,14 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_HeroPortraits_0">
+  <Association Name="FK_HeroPortrait_0">
     <End Role="Hero" Type="Self.Hero" Multiplicity="1" />
-    <End Role="HeroPortraits" Type="Self.HeroPortraits" Multiplicity="*" />
+    <End Role="HeroPortrait" Type="Self.HeroPortrait" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Hero">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="HeroPortraits">
+      <Dependent Role="HeroPortrait">
         <PropertyRef Name="HeroId" />
       </Dependent>
     </ReferentialConstraint>
@@ -213,7 +213,7 @@
     <EntitySet Name="Attributes" EntityType="Self.Attributes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DamageType" EntityType="Self.DamageType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Hero" EntityType="Self.Hero" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="HeroPortraits" EntityType="Self.HeroPortraits" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HeroPortrait" EntityType="Self.HeroPortrait" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SkillAbilityTypes" EntityType="Self.SkillAbilityTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SkillEffectName" EntityType="Self.SkillEffectName" Schema="dbo" store:Type="Tables" />
@@ -223,9 +223,9 @@
       <End Role="Hero" EntitySet="Hero" />
       <End Role="Attributes" EntitySet="Attributes" />
     </AssociationSet>
-    <AssociationSet Name="FK_HeroPortraits_0" Association="Self.FK_HeroPortraits_0">
+    <AssociationSet Name="FK_HeroPortrait_0" Association="Self.FK_HeroPortrait_0">
       <End Role="Hero" EntitySet="Hero" />
-      <End Role="HeroPortraits" EntitySet="HeroPortraits" />
+      <End Role="HeroPortrait" EntitySet="HeroPortrait" />
     </AssociationSet>
     <AssociationSet Name="FK_Skill_0" Association="Self.FK_Skill_0">
       <End Role="Hero" EntitySet="Hero" />

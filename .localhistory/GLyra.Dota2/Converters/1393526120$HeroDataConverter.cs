@@ -68,8 +68,7 @@ namespace Dota.CentralDota.Converters
 
 
                 getDataFromHtml(heroesNames[i]);
-                //TODO When add more than one image, fix this 
-                createHeroPortrait(heroPortraits[0]);
+                createHeroPortrait(heroPortraits[i]);
 
                 //createSkillEffectName(heroesNames[i]);
 

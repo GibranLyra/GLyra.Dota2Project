@@ -57,11 +57,9 @@ namespace GLyra.Dota2.ModelCreators
 
         public SkillEffectName InsertSkillEffectName(string name, string heroName, Skill skill, List<string> skillEffectValues)
         {
-            HeroCreator heroCreator = new HeroCreator();
-            SkillEffectName skillEffectName;
-            Hero hero = heroCreator.getHeroByName(heroName);
+            SkillEffectName skillEffectName;            
 
-            Skill completeSkill = SkillCreator.SelectSkill(skill.Name, hero.ID);            
+            Skill completeSkill = SkillCreator.SelectByName(skill.Name);            
 
             bool exists = checkIfSkillNameExists(name, completeSkill, completeSkill.Description, out skillEffectName);
 

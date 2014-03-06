@@ -15,7 +15,7 @@ namespace Dota.CentralDota.Converters
 
 		private AgilityPackHelper agilityPackHelper;
 		private List<string> heroesNames;
-        private List<string> heroPortraits;
+        private List<string> heroesPortraits;
 		private List<string> heroesUrl;
 		private List<string> skillImages;
 		private List<string> skillNames;
@@ -39,7 +39,7 @@ namespace Dota.CentralDota.Converters
 		{
 			heroesNames = new List<string>();
 			heroesUrl = new List<string>();
-            heroPortraits = new List<string>();
+            heroesPortraits = new List<string>();
 			skillImages = new List<string>();
 			skillNames = new List<string>();
 			skillDescriptions = new List<string>();
@@ -68,8 +68,7 @@ namespace Dota.CentralDota.Converters
 
 
                 getDataFromHtml(heroesNames[i]);
-                //TODO When add more than one image, fix this 
-                createHeroPortrait(heroPortraits[0]);
+
 
                 //createSkillEffectName(heroesNames[i]);
 
@@ -78,10 +77,10 @@ namespace Dota.CentralDota.Converters
             }
 		}
 
-        void createHeroPortrait(string heroPortraitUrl)
+        void createHeroPortrait(int heroNamesIndex)
         {
             HeroPortraitCreator heroPortraitCreator = new HeroPortraitCreator();
-            heroPortraitCreator.InsertHeroPortrait(currentHero.ID, heroPortraitUrl);
+            heroPortraitCreator.InsertHeroPortrait(currentHero.HeroPortraitsId, heropor)
         }
 
 		protected void createSkillEffectName(string heroName)
@@ -106,7 +105,7 @@ namespace Dota.CentralDota.Converters
 
 			doc = LoadHeroHtmlPage(heroName);
 
-            heroPortraits = GetSkillPortraits(doc);
+            heroesPortraits = GetSkillPortraits();
 			skillImages = GetSkillImages(doc);
 			skillNames = GetSkillNames(doc);
 			skillDescriptions = GetSkillDescriptions(doc);
@@ -124,17 +123,18 @@ namespace Dota.CentralDota.Converters
 			Console.WriteLine("Getting info from Dota2 page Completed");
 		}
 
-        private List<string> GetSkillPortraits(HtmlDocument doc)
+        private List<string> GetSkillPortraits()
         {
             int expectedSize = 1;
             List<string> heroesPortraitsUrlsList = new List<string>();
 
-            var heroTopPortraitContainer = doc.DocumentNode.SelectNodes("//*[(@id = 'heroTopPortraitContainer')]");
+            var heroPortraitImg = doc.DocumentNode.SelectNodes("//*[(@class = 'abilityIconHolder2')]");
 
-            heroesPortraitsUrlsList = agilityPackHelper.GetImageUrls(heroTopPortraitContainer, "heroPortraitImg", expectedSize);
+            heroesPortraitsUrlsList = agilityPackHelper.GetImageUrls(heroPortraitImg, "abilityIconHolder2", expectedSize);
 
             return heroesPortraitsUrlsList;
 
+            throw new NotImplementedException();
         }
 
 		protected void createSkill()

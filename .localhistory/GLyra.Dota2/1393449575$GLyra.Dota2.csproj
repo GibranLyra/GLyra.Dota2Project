@@ -79,14 +79,11 @@
     <Compile Include="BaseRepositoryApi.cs" />
     <Compile Include="ModelCreators\AttributesCreator.cs" />
     <Compile Include="ModelCreators\HeroCreator.cs" />
-    <Compile Include="ModelCreators\HeroPortrait.cs" />
-    <Compile Include="ModelCreators\HeroPortraitCreator.cs" />
     <Compile Include="ModelCreators\SkillAbilityTypeCreator.cs" />
     <Compile Include="ModelCreators\SkillCreator.cs" />
     <Compile Include="List.cs" />
     <Compile Include="LogHandler.cs" />
     <Compile Include="ModelCreators\SkillEffectNameCreator.cs" />
-    <Compile Include="ModelCreators\SkillImageCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Converters\HeroDataConverter.cs" />
@@ -117,7 +114,7 @@
     <Compile Include="Repositories\Hero.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\HeroPortrait.cs">
+    <Compile Include="Repositories\HeroPortraits.cs">
       <DependentUpon>Dota2DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Repositories\Skill.cs">

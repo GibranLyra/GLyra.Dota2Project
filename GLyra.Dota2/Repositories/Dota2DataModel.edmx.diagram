@@ -4,12 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ffdcef374d02461ea72d852a60505744" Name="Diagram1">
+      <Diagram DiagramId="946c8f2d823446a7aa90260fcb0e82c8" Name="Diagram1">
         <EntityTypeShape EntityType="Dota2Model.AbilityType" Width="1.5" PointX="6" PointY="2.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.Attributes" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.DamageType" Width="1.5" PointX="3.75" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.Hero" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="Dota2Model.HeroPortraits" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Dota2Model.HeroPortrait" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.Skill" Width="1.5" PointX="6" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.SkillAbilityTypes" Width="1.5" PointX="8.25" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Dota2Model.SkillEffectName" Width="1.5" PointX="8.25" PointY="8.625" IsExpanded="true" />
@@ -18,7 +18,7 @@
         <AssociationConnector Association="Dota2Model.FK_SkillAbilityTypes_1" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Attributes_0" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Skill_2" ManuallyRouted="false" />
-        <AssociationConnector Association="Dota2Model.FK_HeroPortraits_0" ManuallyRouted="false" />
+        <AssociationConnector Association="Dota2Model.FK_HeroPortrait_0" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Skill_0" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_Skill_1" ManuallyRouted="false" />
         <AssociationConnector Association="Dota2Model.FK_SkillAbilityTypes_0" ManuallyRouted="false" />

@@ -45,18 +45,8 @@ namespace GLyra.Dota2.ModelCreators
 
         public void createHeroPrimaryStats(int heroId, Dictionary<string, string> primaryStats)
         {
-            AttributesCreator aCreator = new AttributesCreator(heroId, primaryStats);            
-        }
-
-        public Hero getHeroByName(string heroName)
-        {
-            Hero hero = new Hero();
-            using (Dota2Entities ctx = new Dota2Entities())
-            {
-                hero = ctx.Hero.Where(h => h.Name == heroName).FirstOrDefault();
-            }
-
-            return hero;
+            AttributesCreator aCreator = new AttributesCreator(heroId, primaryStats);
+            
         }
     }
 }

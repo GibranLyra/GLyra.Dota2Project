@@ -41,9 +41,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="HeroPortraits">
-      <EntityTypeMapping TypeName="Dota2Model.HeroPortraits">
-        <MappingFragment StoreEntitySet="HeroPortraits">
+    <EntitySetMapping Name="HeroPortrait">
+      <EntityTypeMapping TypeName="Dota2Model.HeroPortrait">
+        <MappingFragment StoreEntitySet="HeroPortrait">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="HeroId" ColumnName="HeroId" />
           <ScalarProperty Name="Url" ColumnName="Url" />

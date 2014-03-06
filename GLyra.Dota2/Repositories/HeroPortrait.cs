@@ -12,7 +12,7 @@ namespace GLyra.Dota2.Repositories
     using System;
     using System.Collections.Generic;
     
-    public partial class HeroPortraits
+    public partial class HeroPortrait
     {
         public int ID { get; set; }
         public int HeroId { get; set; }

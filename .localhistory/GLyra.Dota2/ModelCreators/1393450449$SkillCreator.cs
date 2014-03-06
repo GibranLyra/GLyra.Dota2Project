@@ -256,36 +256,6 @@ namespace GLyra.Dota2.ModelCreators
             return skill;
         }
 
-        
-        /// <summary>
-        /// Workaround 
-        /// Get the first skill description because there're skills that have the same name and the same heroName, but they are equals, so get the first description
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="description"></param>
-        /// <param name="heroId"></param>
-        /// <returns></returns>
-        public static Skill SelectSkill(string name, int heroId)
-        {
-            Skill skill = new Skill();
-            using (Dota2Entities ctx = new Dota2Entities())
-            {
-                try
-                {
-                    skill = ctx.Skill.Where(s => s.Name == name &&
-                                                 s.HeroId == heroId).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
-                    //TODO adicionar log
-                    throw e;
-                }
-            }
-
-            return skill;
-        }
-
-
         public bool SkillExists(string skillName, string skillDescription, int heroId)
         {
             //Check if the skill exists
